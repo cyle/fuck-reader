@@ -1,0 +1,138 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: 'PT Sans', sans-serif;
+	font-size: 14px;
+	color: #333;
+}
+
+a:link, a:visited {
+	color: red;
+}
+
+a:hover, a:active {
+	color: #C00;
+}
+
+/* header */
+
+h1 {
+	font-family: 'PT Sans Narrow', sans-serif;
+	line-height: 1;
+	font-weight: 700;
+}
+
+#header h1 {
+	font-size: 1.25em;
+	padding: 5px;
+	text-transform: uppercase;
+}
+
+
+/* structural stuff */
+
+#sidebar, #main-column {
+	display: block;
+	position: relative;
+	box-sizing: border-box;
+	padding: 10px;
+/* 	border: 1px solid black; */
+}
+
+#sidebar {
+	float: left;
+	width: 20%;
+}
+
+div#main-column {
+	float: right;
+	width: 80%;
+}
+
+
+/* sidebar stuff */
+
+
+#sidebar ul {
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+#sidebar ul li {
+	margin-bottom: 4px;
+}
+
+#sidebar ul li a.active {
+	font-weight: bold;
+}
+
+
+/* post item crap */
+
+
+div.post {
+	margin: 10px;
+	border-bottom: 1px dotted #ccc;
+	padding-bottom: 10px;
+}
+
+div.post:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+div.post span.post-feed-source {
+	font-style: italic;
+}
+
+
+/* footer crap */
+
+div#footer {
+	text-align: right;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+	font-style: italic;
+	color: #999;
+	font-size: 0.8em;
+}
+
+div#footer a {
+	color: inherit;
+}
+
+
+
+/* stuff for that funky main page */
+
+#lolwut {
+	margin: 50px auto;
+	width: 750px;
+}
+
+#lolwut h1 {
+	font-size: 6em;
+	margin-bottom: 45px;
+}
+
+#lolwut p {
+	font-size: 1.5em;
+	line-height: 1.8;
+}
+
+/* stuff for mobile */
+
+@media only screen and (max-width: 500px) {
+	#lolwut {
+		margin: 50px 10px;
+		width: auto;
+		font-size: 12px;
+	}
+	#lolwut h1 {
+		font-size: 4em;
+	}
+}
