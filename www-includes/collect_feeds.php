@@ -32,13 +32,21 @@ while ($feed = $get_feeds->fetch_assoc()) {
 	$feed_xml_string = curl_exec($ch);
 	curl_close($ch);
 	
+	if ($feed_xml_string == false) {
+		echo 'error getting xml on feed #'.$feed_id.' - '.$feed['feed_title'].' - '.$feed['feed_url']."\n";
+		continue;
+	}
+	
+	error_reporting(0);
 	$feed_xml = simplexml_load_string($feed_xml_string);
+	error_reporting(1);
 	
 	//var_dump($feed_xml->channel);
 	
 	if ($feed_xml == false) {
 		
-		echo 'error getting xml!'."\n";
+		echo 'error parsing xml on feed #'.$feed_id.' - '.$feed['feed_title'].' - '.$feed['feed_url']."\n";
+		continue;
 		
 	} else if (isset($feed_xml->entry)) { // atom feed - http://en.wikipedia.org/wiki/Atom_(standard)
 		
@@ -56,6 +64,9 @@ while ($feed = $get_feeds->fetch_assoc()) {
 			} else if (isset($feed_item->published)) {
 				$post_published = strtotime($feed_item->published);
 			} else {
+				$post_published = time();
+			}
+			if ($post_published > time()) {
 				$post_published = time();
 			}
 			$post_author = (string) $feed_item->author->name;
@@ -111,6 +122,9 @@ while ($feed = $get_feeds->fetch_assoc()) {
 				$post_guid = (string) $feed_item->link;
 			}
 			$post_published = strtotime($feed_item->pubDate);
+			if ($post_published > time()) {
+				$post_published = time();
+			}
 			if (isset($feed_item->author)) {
 				$post_author = (string) $feed_item->author;
 			} else {
@@ -150,7 +164,7 @@ while ($feed = $get_feeds->fetch_assoc()) {
 		
 	}
 	
-	if (!isset($feed['feed_title']) || md5($feed['feed_title']) != md5($feed_title)) {
+	if (!isset($feed['feed_title'])) {
 		$update_feed_title = $mysqli->query("UPDATE feeds SET feed_title='".$mysqli->escape_string(strip_tags($feed_title))."' WHERE feed_id=$feed_id");
 		if (!$update_feed_title) {
 			die('could not update feed title');
