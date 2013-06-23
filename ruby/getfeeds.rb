@@ -1,5 +1,11 @@
 require 'nokogiri'
 require 'feedzirra'
+require 'mysql2'
+require 'yaml'
+
+YAML::ENGINE.yamler = 'psych'
+
+dbconfig = YAML.load_file('dbconn.yml')
 
 # github reference: https://github.com/pauldix/feedzirra
 # ruby doc: http://rubydoc.info/gems/feedzirra/0.1.3/frames
@@ -10,11 +16,12 @@ puts ""
 
 feed_urls = []
 
-f = File.open("subscriptions.xml")
-subs = Nokogiri::XML(f)
-f.close
+dbclient = Mysql2::Client.new(:host => dbconfig["database"]["dbhost"], :username => dbconfig["database"]["dbuser"], :password => dbconfig["database"]["dbpass"], :database => dbconfig["database"]["dbname"])
 
-subs.xpath("//outline").each { |node| feed_urls.push(node.attribute("xmlUrl")) }
+dbresults = dbclient.query("SELECT feed_id, feed_url FROM feeds ORDER BY tsu ASC")
+dbresults.each do |row|
+	feed_urls.push(row["feed_url"])
+end
 
 feed_urls.each { |url| 
   
