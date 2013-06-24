@@ -35,7 +35,7 @@ if (isset($opml_xml->body) && isset($opml_xml->body->outline)) {
 		
 		$feed_url_db = "'".$mysqli->escape_string($feed['xmlUrl'])."'";
 		$feed_homeurl_db = "'".$mysqli->escape_string($feed['htmlUrl'])."'";
-		$feed_title_db = "'".$mysqli->escape_string($feed['title'])."'";
+		$feed_title_db = "'".$mysqli->escape_string(htmlspecialchars(strip_tags($feed['title']), ENT_NOQUOTES, 'UTF-8'))."'";
 		
 		// check to see if this feed already exists -- if so, just add a record into users_feeds
 		$check_for_feed = $mysqli->query("SELECT feed_id FROM feeds WHERE feed_url = $feed_url_db");

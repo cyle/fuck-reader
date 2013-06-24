@@ -105,14 +105,23 @@ function postBit($post = array(), $users_feeds = array()) {
 	// return post item for feed
 	
 	echo '<div class="post '.((isset($post['is_read'])) ? 'read': '').'" data-post-id="'.$post['post_id'].'">';
-	echo '<h3 class="post-title"><a href="'.$post['post_permalink'].'" target="_blank">'.htmlentities(strip_tags($post['post_title'])).'</a></h3>';
+	echo '<h3 class="post-title"><a href="'.$post['post_permalink'].'" target="_blank">'.(($post['post_title'] != null) ? htmlspecialchars(strip_tags($post['post_title']), ENT_NOQUOTES, 'UTF-8') : 'Untitled').'</a></h3>';
 	echo '<div class="post-byline">Published <span class="post-pubdate">'.date('F jS, Y g:iA', $post['post_pubdate']).'</span> on <span class="post-feed-source">'.$users_feeds[$post['feed_id']].'</span></div>';
 	echo '<div class="post-content" style="display:none;">';
 	//echo strip_tags($post['post_content'], '<p><blockquote><a><b><i><em><strong>');
-	$post_body = new DOMDocument();
-	$post_body->loadHTML($post['post_content']);
+	$post_body = new DOMDocument('1.0', 'UTF-8');
+	error_reporting(0);
+	$post_body->loadHTML('<?xml encoding="UTF-8">' . $post['post_content']);
+	foreach ($post_body->childNodes as $item) {
+		if ($item->nodeType == XML_PI_NODE) {
+			$post_body->removeChild($item); // remove hack
+		}
+	}
+	unset($item);
+	error_reporting(1);
+	$post_body->encoding = 'UTF-8';
 	echo $post_body->saveHTML();
-	//echo '<div class="post-readmore"><a href="'.$post['post_permalink'].'" target="_blank" class="post-readmore-link">Read more &raquo;</a></div>';
+	echo '<div class="post-readmore"><a href="'.$post['post_permalink'].'" target="_blank" class="post-readmore-link">Go to original &raquo;</a></div>';
 	echo '</div>';
 	echo '</div>';
 	
