@@ -24,6 +24,7 @@ YAML::ENGINE.yamler = 'psych'
 # some variables for data later
 feeds_processed = 0
 entries_processed = 0
+entries_new = 0
 
 # load database configuration file
 dbconfig = YAML.load_file('dbconn.yml')
@@ -128,6 +129,8 @@ feed_urls.each { |feed_info|
 				
 				puts "entry added to database"
 				
+				entries_new += 1
+				
 			else
 				puts "entry already in the database, moving on"
 			end
@@ -153,3 +156,4 @@ seconds_exec = end_time - start_time
 puts "That took... " + seconds_exec.to_s + " seconds"
 puts "Processed " + feeds_processed.to_s + " feeds"
 puts "Processed " + entries_processed.to_s + " entries"
+puts "Processed " + entries_new.to_s + " new entries"
