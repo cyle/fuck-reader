@@ -18,6 +18,10 @@ a:hover, a:active {
 	color: #C00;
 }
 
+img {
+	display: block;
+}
+
 /* header */
 
 h1 {
@@ -32,6 +36,10 @@ h1 {
 	text-transform: uppercase;
 }
 
+#settings {
+	float: right;
+	margin: 5px;
+}
 
 /* structural stuff */
 
@@ -39,18 +47,17 @@ h1 {
 	display: block;
 	position: relative;
 	box-sizing: border-box;
-	padding: 10px;
+	padding: 0 10px;
 /* 	border: 1px solid black; */
 }
 
 #sidebar {
 	float: left;
-	width: 20%;
+	width: 250px;
 }
 
 div#main-column {
-	float: right;
-	width: 80%;
+	margin-left: 260px;
 }
 
 
@@ -70,14 +77,19 @@ div#main-column {
 	font-weight: bold;
 }
 
+#sidebar ul ul {
+	margin-top: 0;
+	margin-left: 10px;
+}
+
 
 /* post item crap */
 
 
 div.post {
-	margin: 10px;
+	margin: 7px;
 	border-bottom: 1px dotted #ccc;
-	padding-bottom: 10px;
+	padding-bottom: 7px;
 }
 
 div.post:last-child {
@@ -109,6 +121,10 @@ div.post div.post-content {
 	line-height: 1.6;
 	width: 550px;
 	font-family: 'PT Serif', 'PT Sans', sans-serif;
+}
+
+div.post div.post-content p {
+	margin-bottom: 1em;
 }
 
 div.post div.post-content blockquote {

@@ -13,6 +13,7 @@ if (!isset($users_feeds) || $users_feeds == false || count($users_feeds) == 0) {
 	<li><a href="/feeds/"<?php echo ((isset($just_unread) && $just_unread == true && !isset($selected_feed_id)) ? ' class="active"' : ''); ?>>Show All Unread Posts</a></li>
 	<li><a href="/feeds/all/"<?php echo ((isset($just_unread) && $just_unread == false && !isset($selected_feed_id)) ? ' class="active"': ''); ?>>Show All Posts, even Read</a></li>
 	<li><a href="/starred/">Show My Starred Posts</a></li>
+	<ul>
 	<?php
 	foreach ($users_feeds as $feed_id => $feed_title) {
 		echo '<li>';
@@ -20,6 +21,7 @@ if (!isset($users_feeds) || $users_feeds == false || count($users_feeds) == 0) {
 		echo '</li>'."\n";
 	}
 	?>
+	</ul>
 	<li><a href="/settings/">Settings</a></li>
 	</ul>
 	<?php
