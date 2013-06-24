@@ -63,7 +63,6 @@ div#main-column {
 
 /* sidebar stuff */
 
-
 #sidebar ul {
 	margin-top: 10px;
 	margin-left: 20px;
@@ -80,6 +79,7 @@ div#main-column {
 #sidebar ul ul {
 	margin-top: 0;
 	margin-left: 10px;
+	margin-bottom: 0;
 }
 
 

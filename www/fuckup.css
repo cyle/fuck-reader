@@ -23,3 +23,11 @@ div.post-content ul {
 	margin-left: 25px;
 	margin-bottom: 1em;
 }
+
+div.post-content ul ul {
+	margin-bottom: 0;
+}
+
+div.post-content h1, div.post-content h2, div.post-content h3, div.post-content h4 {
+	margin-bottom: 1em;
+}
