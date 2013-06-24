@@ -1,0 +1,25 @@
+/* these styles are meant to get rid of some shit from RSS feeds */
+
+div.post-content ul.related_post {
+	display: none;
+}
+
+div.post-content div.feedflare {
+	display: none;
+}
+
+div.post-content div.caption {
+	margin-bottom: 1em;
+}
+
+div.post-content img {
+	vertical-align: baseline !important;
+	float: none;
+	max-width: 550px;
+	height: auto;
+}
+
+div.post-content ul {
+	margin-left: 25px;
+	margin-bottom: 1em;
+}
