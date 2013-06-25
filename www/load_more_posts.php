@@ -22,6 +22,12 @@ if (isset($_GET['read']) && trim($_GET['read']) == 'yup') {
 	$just_unread = true;
 }
 
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+	$selected_feed_id = (int) $_GET['id'] * 1;
+} else {
+	$selected_feed_id = 0;
+}
+
 $offset = $howmany * ($page - 1);
 
 require_once('../www-includes/dbconn_mysql.php');
@@ -36,11 +42,23 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	<p>No feed posts to show you!</p>
 	<?php
 } else {
-	$all_posts = getAllPosts($current_user_id, $just_unread, $howmany, $offset);
-	foreach ($all_posts as $post) {
-		postBit($post, $users_feeds);
+	if ($selected_feed_id > 0) {
+		$all_posts = getFeedPosts($current_user_id, $selected_feed_id, $just_unread, $howmany, $offset);
+	} else {
+		$all_posts = getAllPosts($current_user_id, $just_unread, $howmany, $offset);
 	}
-	echo '<div class="nav-next"><a href="/feeds/more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";
+	if (count($all_posts) > 0) {
+		foreach ($all_posts as $post) {
+			postBit($post, $users_feeds);
+		}
+		if (count($all_posts) >= $howmany) {
+			if ($selected_feed_id > 0) {
+				echo '<div class="nav-next"><a href="/feed/'.$selected_feed_id.'/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";
+			} else {
+				echo '<div class="nav-next"><a href="/feeds/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";	
+			}
+		}
+	}
 }
 
 ?>

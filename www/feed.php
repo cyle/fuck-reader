@@ -40,6 +40,7 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	foreach ($all_posts as $post) {
 		postBit($post, $users_feeds);
 	}
+	echo '<div class="nav-next"><a href="/feed/'.$selected_feed_id.'/'.(($just_unread == false) ? 'all/' : '').'more/2/25/">load more</a></div>'."\n";
 }
 
 ?>
