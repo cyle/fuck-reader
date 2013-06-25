@@ -10,15 +10,16 @@ if (!isset($users_feeds) || $users_feeds == false || count($users_feeds) == 0) {
 } else {
 	?>
 	<ul>
-	<li><a href="/feeds/"<?php echo ((isset($just_unread) && $just_unread == true && !isset($selected_feed_id)) ? ' class="active"' : ''); ?>>Show All Unread Posts</a></li>
+	<li><a href="/feeds/"<?php echo ((isset($just_unread) && $just_unread == true && !isset($selected_feed_id)) ? ' class="active"' : ''); ?>>Show All <?php echo getAllUnreadCount($current_user_id); ?> Unread Posts</a></li>
 	<li><a href="/feeds/all/"<?php echo ((isset($just_unread) && $just_unread == false && !isset($selected_feed_id)) ? ' class="active"': ''); ?>>Show All Posts, even Read</a></li>
 	<li><a href="/starred/">Show Only Starred Posts</a></li>
 	<li>Your Feeds:</li>
 	<ul>
 	<?php
 	foreach ($users_feeds as $feed_id => $feed_title) {
+		$unread_count = getFeedUnreadCount($current_user_id, $feed_id);
 		echo '<li>';
-		echo '<a href="/feed/'.$feed_id.'/" '.((isset($selected_feed_id) && $feed_id == $selected_feed_id) ? 'class="active"': '').'>'.$feed_title.'</a> (<a href="/feed/'.$feed_id.'/all/" '.((isset($selected_feed_id) && $feed_id == $selected_feed_id && isset($just_unread) && $just_unread == false) ? 'class="active"': '').'>All Items</a>)';
+		echo '['.$unread_count.'] <a href="/feed/'.$feed_id.'/" '.((isset($selected_feed_id) && $feed_id == $selected_feed_id) ? 'class="active"': '').'>'.$feed_title.'</a> (<a href="/feed/'.$feed_id.'/all/" '.((isset($selected_feed_id) && $feed_id == $selected_feed_id && isset($just_unread) && $just_unread == false) ? 'class="active"': '').'>All Items</a>)';
 		echo '</li>'."\n";
 	}
 	?>

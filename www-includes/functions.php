@@ -11,6 +11,44 @@
 
 require_once('dbconn_mysql.php');
 
+function getAllUnreadCount($user_id = 0) {
+	
+	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
+		return false;
+	}
+	
+	$user_id = (int) $user_id * 1;
+	
+	global $mysqli;
+	
+	$get_count = $mysqli->query('SELECT count(post_id) AS postcount FROM posts WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.')');
+	$count_result = $get_count->fetch_assoc();
+	
+	return $count_result['postcount'];
+}
+
+function getFeedUnreadCount($user_id = 0, $feed_id = 0) {
+	
+	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
+		return false;
+	}
+	
+	if (!isset($feed_id) || $feed_id == 0 || !is_numeric($feed_id)) {
+		return false;
+	}
+	
+	$user_id = (int) $user_id * 1;
+	$feed_id = (int) $feed_id * 1;
+	
+	global $mysqli;
+	
+	$get_count = $mysqli->query('SELECT count(post_id) AS postcount FROM posts WHERE feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.')');
+	$count_result = $get_count->fetch_assoc();
+	
+	return $count_result['postcount'];
+	
+}
+
 function getUsersFeeds($user_id = 0) {
 	// get feed IDs for user, return array
 	
@@ -36,10 +74,14 @@ function getUsersFeeds($user_id = 0) {
 	
 }
 
-function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true) {
+function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true, $howmany = 25, $offset = 0) {
 	// get a feed's posts for a user, possibly get all of them
 	
 	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
+		return false;
+	}
+	
+	if (!isset($feed_id) || $feed_id == 0 || !is_numeric($feed_id)) {
 		return false;
 	}
 	
@@ -50,9 +92,9 @@ function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true) {
 	global $mysqli;
 	
 	if ($just_unread == true) {
-		$get_posts = $mysqli->query('SELECT posts.* FROM posts WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT 25');
+		$get_posts = $mysqli->query('SELECT posts.* FROM posts WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
 	} else {
-		$get_posts = $mysqli->query('SELECT posts.*, users_read_posts.row_id AS is_read FROM posts LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' WHERE posts.feed_id='.$feed_id.' ORDER BY posts.post_pubdate DESC LIMIT 25');
+		$get_posts = $mysqli->query('SELECT posts.*, users_read_posts.row_id AS is_read FROM posts LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' WHERE posts.feed_id='.$feed_id.' ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
 	}
 	
 	if ($get_posts->num_rows == 0) {
@@ -66,7 +108,7 @@ function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true) {
 	
 }
 
-function getAllPosts($user_id = 0, $just_unread = true) {
+function getAllPosts($user_id = 0, $just_unread = true, $howmany = 25, $offset = 0) {
 	// get all feeds' posts for user, possibly get all of them
 	
 	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
@@ -79,7 +121,7 @@ function getAllPosts($user_id = 0, $just_unread = true) {
 	global $mysqli;
 	
 	if ($just_unread == true) {
-		$get_posts = $mysqli->query('SELECT * FROM posts WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT 25');
+		$get_posts = $mysqli->query('SELECT * FROM posts WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
 	} else {
 		$get_posts = $mysqli->query('SELECT
 posts.*, users_read_posts.row_id AS is_read
@@ -88,7 +130,7 @@ LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id
 AND users_read_posts.user_id='.$user_id.'
 WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.')
 ORDER BY posts.post_pubdate DESC 
-LIMIT 25');
+LIMIT '.$howmany.' OFFSET '.$offset);
 	}
 	
 	if ($get_posts->num_rows == 0) {
