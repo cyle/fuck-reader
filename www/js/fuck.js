@@ -22,4 +22,8 @@ $(document).ready(function() {
 		
 	});
 	
+	if ($('div.feed-list').length) {
+		$('div.feed-list').jscroll();
+	}
+	
 });

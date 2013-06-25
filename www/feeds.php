@@ -20,7 +20,7 @@ require_once('head.php');
 <body id="feeds">
 <?php require_once('header.php'); ?>
 <?php require_once('sidebar.php'); ?>
-<div id="main-column">
+<div id="main-column" class="feed-list">
 <?php
 
 if ($users_feeds == false || count($users_feeds) == 0) {
@@ -32,6 +32,7 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	foreach ($all_posts as $post) {
 		postBit($post, $users_feeds);
 	}
+	echo '<div class="nav-next"><a href="/feeds/'.(($just_unread == false) ? 'all/' : '').'more/2/25/">load more</a></div>'."\n";
 }
 
 ?>
