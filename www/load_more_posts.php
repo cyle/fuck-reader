@@ -2,7 +2,8 @@
 
 // load more posts
 
-$current_user_id = 1;
+$login_required = true;
+require_once('../www-includes/login_check.php');
 
 if (isset($_GET['num']) && is_numeric($_GET['num'])) {
 	$howmany = (int) $_GET['num'] * 1;

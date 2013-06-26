@@ -46,7 +46,7 @@ $post_json['content'] = $post_final_body;
 echo json_encode($post_json);
 
 // mark as read, if user is logged in
-$current_user_id = 1;
+require_once('../www-includes/login_check.php');
 
 if (isset($current_user_id) && is_numeric($current_user_id)) {
 	$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, $post_id, UNIX_TIMESTAMP())");

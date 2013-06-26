@@ -2,7 +2,8 @@
 
 // mark a post (or all posts in a feed or all unread posts entirely) as unread
 
-$current_user_id = 1;
+$login_required = true;
+require_once('../www-includes/login_check.php');
 
 require_once('../www-includes/dbconn_mysql.php');
 

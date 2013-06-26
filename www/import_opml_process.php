@@ -2,7 +2,8 @@
 
 // upload OPML XML file, process it, then delete it
 
-$current_user_id = 1;
+$login_required = true;
+require_once('../www-includes/login_check.php');
 
 if (!isset($_FILES['f'])) {
 	die('error: no file uploaded');

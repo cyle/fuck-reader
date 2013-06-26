@@ -3,7 +3,7 @@
 	margin: 0;
 }
 
-body {
+body, input {
 	font-family: 'PT Sans', sans-serif;
 	font-size: 14px;
 	color: #333;
@@ -61,6 +61,28 @@ div#main-column {
 	margin-left: 260px;
 }
 
+/* login prompt stuff */
+
+#login-prompt {
+	width: 400px;
+	margin: 50px auto;
+}
+
+#login h1 {
+	font-size: 4em;
+	text-transform: uppercase;
+	margin-bottom: 1em;
+}
+
+#login-prompt input {
+	padding: 3px;
+	width: 300px;
+	margin-bottom: 7px;
+}
+
+#login-prompt input[type="submit"] {
+	width: auto;
+}
 
 /* sidebar stuff */
 
@@ -97,8 +119,12 @@ body#help h3, body#settings-page h3 {
 	font-size: 1.5em;
 }
 
-body#help #main-column p {
+body#help #main-column p, body#help #main-column ul {
 	margin-bottom: 1em;
+}
+
+body#help #main-column ul {
+	margin-left: 25px;
 }
 
 body#help div.help-section, body#settings-page div.settings-section {

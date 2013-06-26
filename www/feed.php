@@ -1,6 +1,7 @@
 <?php
 
-$current_user_id = 1;
+$login_required = true;
+require_once('../www-includes/login_check.php');
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 	die('Sorry, no feed ID given.');
