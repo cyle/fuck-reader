@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	
+	// SHOW ME A POST, OR CLICK ON IT, OR WHATEVER
 	$('div.post').click(function(event) {
 		if ($(this).find('div.post-content').css('display') == 'none') {
 			// if the post content is hidden, stop the user from following any links
@@ -37,8 +38,23 @@ $(document).ready(function() {
 		
 	});
 	
+	// INFINITE SCROLL WHOOOAAAAAAA
 	if ($('div.feed-list').length) {
 		$('div.feed-list').jscroll();
 	}
+	
+	// KEYBOARD SHORTCUTS, BECAUSE YEAH
+	window.addEventListener('keyup', function(e) {
+		//console.log(e.keyCode);
+		/*
+		
+		j = 74 = go down one post in list
+		k = 75 = go up post in list
+		s = 83 = star current item
+		v = 86 = go to original
+		m = 77 = toggle read or unread
+		
+		*/
+	});
 	
 });

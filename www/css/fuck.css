@@ -82,9 +82,13 @@ div#main-column {
 	margin-bottom: 0;
 }
 
+/* main column stuff */
+
+.mark-all-as-read {
+	margin-bottom: 15px;
+}
 
 /* post item crap */
-
 
 div.post {
 	margin: 7px;

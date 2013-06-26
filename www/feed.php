@@ -36,11 +36,19 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	<p>No feed posts to show you!</p>
 	<?php
 } else {
+	?>
+	<p class="mark-all-as-read"><a href="/read/feed/<?php echo $selected_feed_id; ?>/">Mark Every Single Goddamn Post in This Feed as <b>Read</b></a></p>
+	<?php
 	$all_posts = getFeedPosts($current_user_id, $selected_feed_id, $just_unread);
-	foreach ($all_posts as $post) {
-		postBit($post, $users_feeds);
+	if (count($all_posts) == 0) {
+		echo '<p>No posts to show you, sorry.</p>';
+	} else {
+		foreach ($all_posts as $post) {
+			postBit($post, $users_feeds);
+		}
+		echo '<div class="nav-next"><a href="/feed/'.$selected_feed_id.'/'.(($just_unread == false) ? 'all/' : '').'more/2/25/">load more</a></div>'."\n";
 	}
-	echo '<div class="nav-next"><a href="/feed/'.$selected_feed_id.'/'.(($just_unread == false) ? 'all/' : '').'more/2/25/">load more</a></div>'."\n";
+	
 }
 
 ?>
