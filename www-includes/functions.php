@@ -7,7 +7,7 @@
 // no "unread" functionality yet
 
 
-
+$necessary_posts_columns = 'posts.post_id, posts.feed_id, posts.post_title, posts.post_guid, posts.post_permalink, posts.post_byline, posts.post_pubdate, posts.ts';
 
 require_once('dbconn_mysql.php');
 
@@ -61,7 +61,7 @@ function getUsersFeeds($user_id = 0) {
 	
 	global $mysqli;
 	
-	$get_feeds = $mysqli->query('SELECT * FROM feeds WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') ORDER BY feed_title ASC, feed_id ASC');
+	$get_feeds = $mysqli->query('SELECT feed_id, feed_title FROM feeds WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') ORDER BY feed_title ASC, feed_id ASC');
 	
 	if ($get_feeds->num_rows == 0) {
 		return array();
@@ -89,12 +89,12 @@ function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true, $howmany 
 	$feed_id = (int) $feed_id * 1;
 	$feed_posts = array();
 	
-	global $mysqli;
+	global $mysqli, $necessary_posts_columns;
 	
 	if ($just_unread == true) {
-		$get_posts = $mysqli->query('SELECT posts.* FROM posts WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.' FROM posts WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
 	} else {
-		$get_posts = $mysqli->query('SELECT posts.*, users_read_posts.row_id AS is_read FROM posts LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' WHERE posts.feed_id='.$feed_id.' ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read FROM posts LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' WHERE posts.feed_id='.$feed_id.' ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
 	}
 	
 	if ($get_posts->num_rows == 0) {
@@ -118,13 +118,12 @@ function getAllPosts($user_id = 0, $just_unread = true, $howmany = 25, $offset =
 	$user_id = (int) $user_id * 1;
 	$feeds_posts = array();
 	
-	global $mysqli;
+	global $mysqli, $necessary_posts_columns;
 	
 	if ($just_unread == true) {
-		$get_posts = $mysqli->query('SELECT * FROM posts WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.' FROM posts WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
 	} else {
-		$get_posts = $mysqli->query('SELECT
-posts.*, users_read_posts.row_id AS is_read
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read
 FROM posts
 LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id
 AND users_read_posts.user_id='.$user_id.'
@@ -146,25 +145,11 @@ LIMIT '.$howmany.' OFFSET '.$offset);
 function postBit($post = array(), $users_feeds = array()) {
 	// return post item for feed
 	
-	echo '<div class="post '.((isset($post['is_read'])) ? 'read': '').'" data-post-id="'.$post['post_id'].'">'."\n";
+	echo '<div class="post '.((isset($post['is_read'])) ? 'read': 'unread').'" id="post-'.$post['post_id'].'" data-post-id="'.$post['post_id'].'">'."\n";
 	echo '<h3 class="post-title"><a href="'.$post['post_permalink'].'" target="_blank">'.(($post['post_title'] != null) ? htmlspecialchars(strip_tags($post['post_title']), ENT_NOQUOTES, 'UTF-8') : 'Untitled').'</a></h3>'."\n";
 	echo '<div class="post-byline">Published <span class="post-pubdate">'.date('F jS, Y g:iA', $post['post_pubdate']).'</span> on <span class="post-feed-source">'.$users_feeds[$post['feed_id']].'</span></div>'."\n";
-	echo '<div class="post-content" style="display:none;">'."\n";
-	//echo strip_tags($post['post_content'], '<p><blockquote><a><b><i><em><strong>');
-	$post_body = new DOMDocument('1.0', 'UTF-8');
-	error_reporting(0);
-	$post_body->loadHTML('<?xml encoding="UTF-8">' . $post['post_content']);
-	foreach ($post_body->childNodes as $item) {
-		if ($item->nodeType == XML_PI_NODE) {
-			$post_body->removeChild($item); // remove hack
-		}
-	}
-	unset($item);
-	error_reporting(1);
-	$post_body->encoding = 'UTF-8';
-	echo $post_body->saveHTML();
-	echo "\n";
-	echo '<div class="post-readmore"><a href="'.$post['post_permalink'].'" target="_blank" class="post-readmore-link">Go to original &raquo;</a></div>'."\n";
+	echo '<div class="post-content" style="display:none;" id="post-content-'.$post['post_id'].'">'."\n";
+	// post content used to go here!
 	echo '</div>'."\n";
 	echo '</div>'."\n";
 	

@@ -12,11 +12,26 @@ $(document).ready(function() {
 			$(this).find('div.post-content').hide();
 		} else {
 			// otherwise, open the post if it's clicked on, and mark it as read
-			$(this).find('div.post-content').show();
+			var this_post_id = $(this).attr('data-post-id');
+			$.ajax({
+				url: '/get/post/'+this_post_id+'/',
+				dataType: 'json',
+				success: function(data) {
+					if (data.error != undefined) {
+						alert('There was an error of some kind...');
+						console.log(data);
+					} else {
+						$('div.post-content#post-content-'+this_post_id).html(data.content);
+						$('div.post-content#post-content-'+this_post_id).show();
+					}
+				},
+				error: function(jqxhr, status, err) {
+					console.log('get post error: ' + status + ' ' + err);
+				}
+			});
 			if ($(this).hasClass('read') == false) {
 				$(this).addClass('read');
-				var this_post_int = $(this).attr('data-post-id');
-				$.get('/read/post/'+this_post_int+'/');
+				//$.get('/read/post/'+this_post_id+'/');
 			}
 		}
 		
