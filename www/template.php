@@ -6,7 +6,7 @@ require_once('../www-includes/dbconn_mysql.php');
 
 require_once('head.php');
 ?>
-<body id="feeds">
+<body id="template">
 <?php require_once('header.php'); ?>
 <?php require_once('sidebar.php'); ?>
 <div id="main-column">

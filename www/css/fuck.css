@@ -34,6 +34,7 @@ h1 {
 	font-size: 1.25em;
 	padding: 5px;
 	text-transform: uppercase;
+	margin-bottom: 0;
 }
 
 #settings {
@@ -86,6 +87,59 @@ div#main-column {
 
 .mark-all-as-read {
 	margin-bottom: 15px;
+}
+
+body#help h3, body#settings-page h3 {
+	margin-bottom: 1em;
+	font-family: 'PT Sans Narrow', sans-serif;
+	line-height: 1;
+	font-weight: 700;
+	font-size: 1.5em;
+}
+
+body#help #main-column p {
+	margin-bottom: 1em;
+}
+
+body#help div.help-section, body#settings-page div.settings-section {
+	margin-bottom: 20px;
+	border: 1px dotted #ccc;
+	padding: 10px;
+}
+
+body#help #main-column table th, body#help #main-column table td {
+	padding: 2px 5px 2px;
+}
+
+body#help #main-column table th {
+	text-align: left;
+	border-bottom: 1px solid #222;
+}
+
+body#help #main-column table td {
+	border-bottom: 1px solid #ccc;
+}
+
+body#subs-page #main-column table th, body#subs-page #main-column table td {
+	padding: 2px 5px 2px;
+}
+
+body#subs-page #main-column table th {
+	text-align: left;
+	border-bottom: 1px solid #222;
+}
+
+body#subs-page #main-column table td {
+	border-bottom: 1px solid #ccc;
+}
+
+body#subs-page #main-column > * {
+	margin-bottom: 15px;
+}
+
+body#subs-page #main-column input[type="url"] {
+	width: 350px;
+	padding: 3px;
 }
 
 /* post item crap */

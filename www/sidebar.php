@@ -4,7 +4,9 @@ if (!isset($users_feeds) || $users_feeds == false || count($users_feeds) == 0) {
 	?>
 	<ul>
 	<li>No feeds to show you! Add one!</li>
-	<li><a href="/settings/">Settings</a></li>
+	<li><a href="/subs/">Manage Subscriptions</a></li>
+	<li><a href="/settings/">Change Your Settings</a></li>
+	<li><a href="/help/">Help</a></li>
 	</ul>
 	<?php
 } else {
@@ -24,7 +26,9 @@ if (!isset($users_feeds) || $users_feeds == false || count($users_feeds) == 0) {
 	}
 	?>
 	</ul>
+	<li><a href="/subs/">Manage Subscriptions</a></li>
 	<li><a href="/settings/">Change Your Settings</a></li>
+	<li><a href="/help/">Help</a></li>
 	</ul>
 	<?php
 }
