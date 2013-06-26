@@ -15,7 +15,11 @@ require_once('head.php');
 
 	<h3>Subscriptions!</h3>
 	
-	<p>Add a new feed: <input type="url" /></p>
+	<form action="/subs/process/" method="post">
+	<p>Make sure you're adding the actual link to the site's <i>feed</i>, btw. Not just a link to a site you like.</p>
+	<p>This accepts standard RSS 1.0, 1.1, 2.0, and Atom feeds.</p>
+	<p>Add a new feed: <input type="hidden" name="a" value="n" /><input type="url" name="feed" /> <input type="submit" value="add &raquo;" /></p>
+	</form>
 	
 	<form action="/subs/process/" method="post">
 	<table>
