@@ -15,6 +15,13 @@ require_once('head.php');
 <body id="login" onload="document.getElementById('start-here').focus()">
 <div id="login-prompt">
 <h1>fuck reader</h1>
+<?php
+if (isset($_GET['register_success'])) {
+	?>
+	<p><span class="registered">Oh, it looks like you registered. Log in now.</span></p>
+	<?php
+}
+?>
 <form action="/login/" method="post">
 <p><input tabindex="1" id="start-here" name="e" type="email" placeholder="you@fuck.off" /></p>
 <p><input tabindex="2" name="p" type="password" /></p>

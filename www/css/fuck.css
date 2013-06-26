@@ -63,25 +63,45 @@ div#main-column {
 
 /* login prompt stuff */
 
-#login-prompt {
+#login-prompt, #register-prompt {
 	width: 400px;
 	margin: 50px auto;
 }
 
-#login h1 {
+#login h1, #register-prompt h1 {
 	font-size: 4em;
 	text-transform: uppercase;
 	margin-bottom: 1em;
 }
 
-#login-prompt input {
+#login-prompt input, #register-prompt input {
 	padding: 3px;
 	width: 300px;
 	margin-bottom: 7px;
 }
 
-#login-prompt input[type="submit"] {
+#register-prompt label {
+	display: inline-block;
+	width: 100px;
+}
+
+#register-prompt input {
+	width: 250px;
+}
+
+#login-prompt input[type="submit"], #register-prompt input[type="submit"] {
 	width: auto;
+}
+
+#login-prompt > p {
+	margin-bottom: 20px;
+}
+
+#login-prompt span.registered {
+	padding: 5px;
+	border-radius: 4px;
+	background-color: #0a8ae0;
+	color: white;
 }
 
 /* sidebar stuff */
