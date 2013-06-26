@@ -16,6 +16,8 @@ require_once('head.php');
 
 	<h3>Subscriptions!</h3>
 	
+	<p><b>(NOTE: This page does not actually work yet, lol.)</b></p>
+	
 	<form action="/subs/process/" method="post">
 	<p>Make sure you're adding the actual link to the site's <i>feed</i>, btw. Not just a link to a site you like.</p>
 	<p>This accepts standard RSS 1.0, 1.1, 2.0, and Atom feeds.</p>

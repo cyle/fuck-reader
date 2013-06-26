@@ -19,6 +19,19 @@ require_once('head.php');
 <p>Here's some stuff to know...</p>
 
 <div class="help-section">
+<h3>Upcoming Features</h3>
+<p>Here are some features at the top of my priority list:</p>
+<ul>
+<li>Mark as read/unread per post</li>
+<li>Star a post, keep it fucking forever</li>
+<li>Keyboard shortcuts</li>
+<li>A working subscription management page</li>
+<li>Mobile versions for iPhone and iPad</li>
+</ul>
+<p>For other features, look in the FAQ, or observe the blank "not done yet" sections of the settings page.</p>
+</div>
+
+<div class="help-section">
 <h3>Keyboard commands:</h3>
 <p><b>(NOTE: THESE ARE NOT ACTUALLY IMPLEMENTED YET, LOL)</b></p>
 <table>
@@ -42,6 +55,11 @@ require_once('head.php');
 <p><b>Can I remove all of my data from this?</b> Of course you can. I don't want your shit anyway. But that feature isn't done yet.</p>
 <p><b>Are you making money off of this? Are you selling my shit?</b> Fuck no. I'm not making a goddamn cent. For serious, I'm not.</p>
 <p><b>How long do you keep posts?</b> The starting plan is to delete posts (read and unread) after 30 days unless they're starred.</p>
+</div>
+
+<div class="help-section">
+<h3>I need more help!</h3>
+<p>For now, send me a goddamn tweet: <a target="_blank" href="http://twitter.com/cylegage">@cylegage</a></p>
 </div>
 
 
