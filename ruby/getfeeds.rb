@@ -72,6 +72,7 @@ feed_urls.each { |feed_info|
 		# successfully parsed... deal with it!
 		puts ""
 		puts "Feed title: " + parsed.title unless parsed.title.nil?
+				
 		parsed.entries.each do |entry| 
 			
 			# okay now we are parsing entries, cool...
@@ -138,6 +139,12 @@ feed_urls.each { |feed_info|
 			entries_processed += 1
 			
 		end
+		
+		# try updating feed title and whatnot
+		feed_title_db = dbclient.escape(parsed.title)
+		feed_homeurl_db = dbclient.escape(parsed.url)
+		updatefeedrow = dbclient.query("UPDATE feeds SET tsu=UNIX_TIMESTAMP(), feed_title='#{feed_title_db}', feed_homeurl='#{feed_homeurl_db}' WHERE feed_id=" + feed_info["feed_id"].to_s)
+		
 		feeds_processed += 1
 	end
 	
