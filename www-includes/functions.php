@@ -147,7 +147,7 @@ function postBit($post = array(), $users_feeds = array()) {
 	// return post item for feed
 	
 	echo '<div class="post '.((isset($post['is_read'])) ? 'read': 'unread').'" id="post-'.$post['post_id'].'" data-post-id="'.$post['post_id'].'">'."\n";
-	echo '<h3 class="post-title"><a href="'.$post['post_permalink'].'" target="_blank">'.(($post['post_title'] != null) ? htmlspecialchars(strip_tags($post['post_title']), ENT_NOQUOTES, 'UTF-8') : 'Untitled').'</a></h3>'."\n";
+	echo '<h3 class="post-header"><span class="star-this-post" title="star/unstar this post">&#10029;</span> <span class="mark-this-post" title="mark as read/unread">&#10004;</span> <a class="post-title" href="'.$post['post_permalink'].'" target="_blank">'.(($post['post_title'] != null) ? htmlspecialchars(strip_tags($post['post_title']), ENT_NOQUOTES, 'UTF-8') : 'Untitled').'</a></h3>'."\n";
 	echo '<div class="post-byline">Published <span class="post-pubdate">'.date('F jS, Y g:iA', $post['post_pubdate']).'</span> on <span class="post-feed-source">'.$users_feeds[$post['feed_id']].'</span></div>'."\n";
 	echo '<div class="post-content" style="display:none;" id="post-content-'.$post['post_id'].'">'."\n";
 	// post content used to go here!

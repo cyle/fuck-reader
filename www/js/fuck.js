@@ -37,18 +37,52 @@ $(document).ready(function() {
 });
 
 function postClickHandler(event) {
+	
 	if ($(this).find('div.post-content').css('display') == 'none') {
 		// if the post content is hidden, stop the user from following any links
 		event.preventDefault();
 	}
-	// hide all other open posts
-	$('div.post-content').not($(this).find('div.post-content')).hide();
-	if ($(event.toElement).hasClass('post-title') && $(this).find('div.post-content').css('display') == 'block') {
+	
+	var this_post_id = $(this).attr('data-post-id');
+	
+	if ($(event.toElement).hasClass('post-header') && $(this).find('div.post-content').css('display') == 'block') {
+		
 		// close the post if you are clicking on its header
 		$(this).find('div.post-content').hide();
+		
+	} else if ($(event.toElement).hasClass('mark-this-post')) {
+		
+		//console.log('marking post ID ' + this_post_id + ' read/unread/uhhh');
+		
+		if ($(this).hasClass('unread')) {
+			$(this).removeClass('unread');
+			$(this).addClass('read');
+			$.get('/read/post/'+this_post_id+'/');
+		} else if ($(this).hasClass('read')) {
+			$(this).removeClass('read');
+			$(this).addClass('unread');
+			$.get('/unread/post/'+this_post_id+'/');
+		}
+		
+	} else if ($(event.toElement).hasClass('star-this-post')) {
+		
+		//console.log('starring/unstarring post ID ' + this_post_id);
+		
+		if ($(this).hasClass('starred')) {
+			$(this).removeClass('starred');
+			$.get('/unstar/post/'+this_post_id+'/');
+		} else {
+			$(this).addClass('starred');
+			$.get('/star/post/'+this_post_id+'/');
+		}
+		
 	} else {
+		
+		// hide all other open posts
+		$('div.post-content').not($(this).find('div.post-content')).hide();
+		
 		// otherwise, open the post if it's clicked on, and mark it as read
-		var this_post_id = $(this).attr('data-post-id');
+		
 		$.ajax({
 			url: '/get/post/'+this_post_id+'/',
 			dataType: 'json',
@@ -65,9 +99,12 @@ function postClickHandler(event) {
 				console.log('get post error: ' + status + ' ' + err);
 			}
 		});
-		if ($(this).hasClass('read') == false) {
+		
+		if ($(this).hasClass('unread')) {
+			$(this).removeClass('unread');
 			$(this).addClass('read');
 			//$.get('/read/post/'+this_post_id+'/');
 		}
+		
 	}
 }

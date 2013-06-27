@@ -219,6 +219,22 @@ div.post h3 a:visited, div.post.read h3 a {
 	color: #7bb6dd;
 }
 
+div.post span.star-this-post {
+	color: #7bb6dd;
+}
+
+div.post.starred span.star-this-post {
+	color: #dee117;
+}
+
+div.post.unread span.mark-this-post {
+	color: #0a8ae0;
+}
+
+div.post.read span.mark-this-post {
+	color: #7bb6dd;
+}
+
 div.post div.post-byline {
 	color: #aaa;
 }
