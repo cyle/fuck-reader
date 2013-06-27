@@ -45,7 +45,7 @@ require_once('head.php');
 <div class="help-section">
 <h3>Keyboard commands:</h3>
 <p><b>(NOTE: THESE ARE NOT ACTUALLY IMPLEMENTED YET, LOL)</b></p>
-<table>
+<table class="fucked">
 <tr><th>Key</th><th>What it does</th></tr>
 <tr><td>j</td><td>Go to the next post! (down, to be exact)</td></tr>
 <tr><td>k</td><td>Go to the previous post! (up, to be exact)</td></tr>

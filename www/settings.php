@@ -32,6 +32,28 @@ will have:
 </div>
 
 <div class="settings-section">
+<h3>Invite Codes</h3>
+<p>Use these to invite more people to the site.</p>
+<?php
+$get_invites = $mysqli->query("SELECT * FROM user_invites WHERE owner_id=$current_user_id");
+if ($get_invites->num_rows > 0) {
+	?>
+	<table class="fucked">
+	<tr><th>Code</th><th>Already used?</th></tr>
+	<?php
+	while ($invite = $get_invites->fetch_assoc()) {
+		echo '<tr><td>'.$invite['invite_code'].'</td><td>'.(($invite['is_used'] == 1) ? 'Yup' : 'Nope').'</td></tr>';
+	}
+	?>
+	</table>
+	<?php
+} else {
+	echo '<p>No invites to give you, sorry.</p>';
+}
+?>
+</div>
+
+<div class="settings-section">
 <h3>Export Your Data</h3>
 <p>Not done yet, sorry.</p>
 </div>

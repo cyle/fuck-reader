@@ -153,29 +153,16 @@ body#help div.help-section, body#settings-page div.settings-section {
 	padding: 10px;
 }
 
-body#help #main-column table th, body#help #main-column table td {
+table.fucked th, table.fucked td {
 	padding: 2px 5px 2px;
 }
 
-body#help #main-column table th {
+table.fucked th {
 	text-align: left;
 	border-bottom: 1px solid #222;
 }
 
-body#help #main-column table td {
-	border-bottom: 1px solid #ccc;
-}
-
-body#subs-page #main-column table th, body#subs-page #main-column table td {
-	padding: 2px 5px 2px;
-}
-
-body#subs-page #main-column table th {
-	text-align: left;
-	border-bottom: 1px solid #222;
-}
-
-body#subs-page #main-column table td {
+table.fucked td {
 	border-bottom: 1px solid #ccc;
 }
 

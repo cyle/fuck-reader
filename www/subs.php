@@ -37,7 +37,7 @@ require_once('head.php');
 	if ($get_feeds->num_rows > 0) {
 		?>
 	<form action="/subs/process/" method="post">
-	<table>
+	<table class="fucked">
 	<tr><th></th><th>Name</th><th>URL</th><th>Options</th></tr>
 	<?php
 		while ($feed = $get_feeds->fetch_assoc()) {
