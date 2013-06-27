@@ -22,13 +22,24 @@ require_once('head.php');
 <h3>Upcoming Features</h3>
 <p>Here are some features at the top of my priority list:</p>
 <ul>
-<li>Mark as read/unread per post</li>
-<li>Star a post, keep it fucking forever</li>
-<li>Keyboard shortcuts</li>
-<li>A working subscription management page</li>
+<li>Interface tweaks -- your suggestions are welcome, I guess</li>
 <li>Mobile versions for iPhone and iPad</li>
+<li>Keyboard shortcuts</li>
+<li>Lots of backend minutia</li>
+<li>Sort by publish date oldest-first (latest-first is the current default)</li>
+<li>Filling in the "not done yet" stuff in the settings page</li>
 </ul>
-<p>For other features, look in the FAQ, or observe the blank "not done yet" sections of the settings page.</p>
+<p>These features may come someday:</p>
+<ul>
+<li>An API</li>
+<li>"View by day" mode, for easier catching-up</li>
+</ul>
+</div>
+
+<div class="help-section">
+<h3>Functionality</h3>
+<p>To mark a post as read (or revert it to unread) without having to actually open it, click the &#10004; symbol next to the post title.</p>
+<p>To star/unstar a post, click the &#10029; symbol next to the post title.</p>
 </div>
 
 <div class="help-section">
