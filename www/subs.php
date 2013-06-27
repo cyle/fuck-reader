@@ -15,8 +15,11 @@ require_once('head.php');
 <div id="main-column">
 
 	<h3>Subscriptions!</h3>
-	
-	<p><b>(NOTE: This page does not actually work yet, lol.)</b></p>
+		
+	<?php if (isset($_GET['new_success'])) { ?><p class="success">Added new subscription successfully. It's a brand new feed, so it may take 5 minutes or so to sync up.</p><?php } ?>
+	<?php if (isset($_GET['added_success'])) { ?><p class="success">Added new subscription successfully. It should show up in your feed list with unread posts immediately.</p><?php } ?>
+	<?php if (isset($_GET['unread_success'])) { ?><p class="success">Marked selected feed(s) as unread.</p><?php } ?>
+	<?php if (isset($_GET['delete_success'])) { ?><p class="success">Deleted selected feed(s) from your subscriptions.</p><?php } ?>
 	
 	<form action="/subs/process/" method="post">
 	<p>Make sure you're adding the actual link to the site's <i>feed</i>, btw. Not just a link to a site you like.</p>
@@ -36,7 +39,7 @@ require_once('head.php');
 		echo '<td><input type="checkbox" value="'.$feed['feed_id'].'" name="feed-id[]" /></td>';
 		echo '<td>'.$feed['feed_title'].'</td>';
 		echo '<td>'.$feed['feed_homeurl'].'</td>';
-		echo '<td><a href="#">delete</a> / <a href="#">mark all unread</a></td>';
+		echo '<td><a href="/subs/process/d/'.$feed['feed_id'].'/">delete</a> / <a href="/subs/process/u/'.$feed['feed_id'].'/">mark all unread</a></td>';
 		echo '</tr>'."\n";
 	}
 	

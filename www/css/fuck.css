@@ -188,6 +188,13 @@ body#subs-page #main-column input[type="url"] {
 	padding: 3px;
 }
 
+p.success, div.success {
+	background-color: #0d9822;
+	color: white;
+	padding: 4px 8px;
+	border-radius: 4px;
+}
+
 /* post item crap */
 
 div.post {
