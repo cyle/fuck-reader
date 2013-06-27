@@ -94,7 +94,7 @@ function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true, $howmany 
 	if ($just_unread == true) {
 		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.' FROM posts WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
 	} else {
-		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read FROM posts LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' WHERE posts.feed_id='.$feed_id.' ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read FROM posts LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' WHERE posts.feed_id='.$feed_id.' GROUP BY post_id ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
 	}
 	
 	if ($get_posts->num_rows == 0) {
@@ -128,6 +128,7 @@ FROM posts
 LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id
 AND users_read_posts.user_id='.$user_id.'
 WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.')
+GROUP BY post_id
 ORDER BY posts.post_pubdate DESC 
 LIMIT '.$howmany.' OFFSET '.$offset);
 	}

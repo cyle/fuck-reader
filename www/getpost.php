@@ -49,7 +49,11 @@ echo json_encode($post_json);
 require_once('../www-includes/login_check.php');
 
 if (isset($current_user_id) && is_numeric($current_user_id)) {
-	$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, $post_id, UNIX_TIMESTAMP())");
+	// do not do this if they are already read
+	$check_for_if_read = $mysqli->query("SELECT row_id FROM users_read_posts WHERE user_id=$current_user_id AND post_id=$post_id");
+	if ($check_for_if_read->num_rows == 0) {
+		$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, $post_id, UNIX_TIMESTAMP())");
+	}
 }
 
 ?>
