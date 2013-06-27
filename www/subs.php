@@ -5,7 +5,7 @@ require_once('../www-includes/login_check.php');
 
 require_once('../www-includes/dbconn_mysql.php');
 
-$this_page = 'subscriptions';
+$page_title = 'subscriptions';
 
 require_once('head.php');
 ?>

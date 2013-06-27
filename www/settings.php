@@ -5,7 +5,7 @@ require_once('../www-includes/login_check.php');
 
 require_once('../www-includes/dbconn_mysql.php');
 
-$this_page = 'settings';
+$page_title = 'settings';
 
 require_once('head.php');
 ?>
