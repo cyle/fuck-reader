@@ -55,6 +55,7 @@ require_once('head.php');
 <p><b>Can I remove all of my data from this?</b> Of course you can. I don't want your shit anyway. But that feature isn't done yet.</p>
 <p><b>Are you making money off of this? Are you selling my shit?</b> Fuck no. I'm not making a goddamn cent. For serious, I'm not.</p>
 <p><b>How long do you keep posts?</b> The starting plan is to delete posts (read and unread) after 30 days unless they're starred.</p>
+<p><b>Why are some posts showing up as read before I've read them?</b> Post titles will display as "read" if you have already visited the URL of the original article, but will still technically be "unread" on here.</p>
 </div>
 
 <div class="help-section">
