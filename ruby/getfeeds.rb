@@ -141,9 +141,19 @@ feed_urls.each { |feed_info|
 		end
 		
 		# try updating feed title and whatnot
-		feed_title_db = dbclient.escape(parsed.title)
-		feed_homeurl_db = dbclient.escape(parsed.url)
-		updatefeedrow = dbclient.query("UPDATE feeds SET tsu=UNIX_TIMESTAMP(), feed_title='#{feed_title_db}', feed_homeurl='#{feed_homeurl_db}' WHERE feed_id=" + feed_info["feed_id"].to_s)
+		unless parsed.title.nil?
+			feed_title_db = "'"+dbclient.escape(parsed.title)+"'"
+		else
+			feed_title_db = 'null'
+		end
+		
+		unless parsed.url.nil?
+			feed_homeurl_db = "'"+dbclient.escape(parsed.url)+"'"
+		else
+			feed_homeurl_db = 'null'
+		end
+		
+		updatefeedrow = dbclient.query("UPDATE feeds SET tsu=UNIX_TIMESTAMP(), feed_title=#{feed_title_db}, feed_homeurl=#{feed_homeurl_db} WHERE feed_id=" + feed_info["feed_id"].to_s)
 		
 		feeds_processed += 1
 	end
