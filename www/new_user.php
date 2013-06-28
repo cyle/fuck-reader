@@ -56,7 +56,7 @@ if (!$new_user_row) {
 
 $new_user_id = $mysqli->insert_id;
 
-$code_used = $mysqli->query("UPDATE user_invites SET is_used=1, by_new_user=$new_user_id WHERE invite_code=$invite_code_db");
+$code_used = $mysqli->query("UPDATE user_invites SET is_used=1, by_new_user=$new_user_id, used_ts=UNIX_TIMESTAMP() WHERE invite_code=$invite_code_db");
 
 header('Location: /login/?register_success');
 
