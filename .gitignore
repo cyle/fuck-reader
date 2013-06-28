@@ -2,3 +2,4 @@ dbconn_mysql.php
 dbconn.yml
 ruby/test
 config/login_config.php
+config/google_analytics.php

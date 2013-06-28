@@ -12,6 +12,8 @@ Edit **config/login_config.example.php** and rename it to login_config.php when 
 
 Edit **www-includes/dbconn_mysql.example.php** and rename it to dbconn_mysql.php when you're done.
 
+If you want to use Google Analytics, edit **config/google_analytics.example.php** and rename it to google_analytics.php when you're done.
+
 SQL set up not included yet...
 
 ## Feed Fetching Prereqs
