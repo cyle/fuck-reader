@@ -35,7 +35,7 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	?>
 	<p class="feed-utils">
 	<?php if ($just_unread) { ?><a href="/feeds/all/">Show All Posts</a><?php } else { ?><a href="/feeds/">Show Unread Posts</a><?php } ?>
-	<?php if (count($all_posts) > 0 && $just_unread) { ?> - <a href="/read/all/" onclick="return confirm('Are you sure you wanna do this?')">Mark Every Single Goddamn Post in ALL FEEDS as <b>Read</b></a><?php } ?>
+	<?php if (count($all_posts) > 0 && $just_unread) { ?> - <a href="/read/all/">Mark Every Single Goddamn Post in ALL FEEDS as <b>Read</b></a><?php } ?>
 	</p>
 	<?php
 	if (count($all_posts) == 0) {
