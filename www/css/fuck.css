@@ -135,6 +135,10 @@ div#main-column {
 	margin-bottom: 15px;
 }
 
+body#help div#faq-answers {
+	width: 500px;
+}
+
 body#help h3, body#settings-page h3 {
 	margin-bottom: 1em;
 	font-family: 'PT Sans Narrow', sans-serif;

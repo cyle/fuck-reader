@@ -57,16 +57,19 @@ require_once('head.php');
 
 <div class="help-section">
 <h3>FAQ</h3>
-<p><b>Can I import my Google Reader shit to here?</b> Yes, go to settings, upload your <i>subscriptions.xml</i> file.</p>
-<p><b>Can I export my shit from here?</b> Yes, but not right now. Haven't created that yet.</p>
-<p><b>Will there be an API for all of this?</b> Yes, but not right now. Haven't created that yet.</p>
-<p><b>Will this shit be free forever?</b> Maybe. Probably. I dunno. Depends. Fuck off.</p>
-<p><b>Can I get invites for my friends and shit?</b> Maybe. I dunno. Send me a whore-ific message <a target="_blank" href="http://twitter.com/cylegage">@cylegage</a>.</p>
-<p><b>Google Reader used to do X, or Feedly does X, or Reddit does X, can you make this do it, too?</b> You can fuck right the fuck off.</p>
-<p><b>Can I remove all of my data from this?</b> Of course you can. I don't want your shit anyway. But that feature isn't done yet.</p>
-<p><b>Are you making money off of this? Are you selling my shit?</b> Fuck no. I'm not making a goddamn cent. For serious, I'm not.</p>
-<p><b>How long do you keep posts?</b> The starting plan is to delete posts (read and unread) after 30 days unless they're starred.</p>
-<p><b>Why are some posts showing up as read before I've read them?</b> Post titles will display as "read" if you have already visited the URL of the original article, but will still technically be "unread" on here.</p>
+<div id="faq-answers">
+<p><b>Can I import my Google Reader shit to here?</b><br />Yes, go to settings, upload your <i>subscriptions.xml</i> file.</p>
+<p><b>Can I export my shit from here?</b><br />Yes, but not right now. Haven't created that yet.</p>
+<p><b>Will there be an API for all of this?</b><br />Yes, but not right now. Haven't created that yet.</p>
+<p><b>Will this shit be free forever?</b><br />Maybe. Probably. I dunno. Depends. Fuck off.</p>
+<p><b>Can I get invites for my friends and shit?</b><br />Maybe. I dunno. Send me a whore-ific message <a target="_blank" href="http://twitter.com/cylegage">@cylegage</a>.</p>
+<p><b>Google Reader used to do X, or Feedly does X, or Reddit does X, can you make this do it, too?</b><br />You can fuck right the fuck off.</p>
+<p><b>Can I remove all of my data from this?</b><br />Of course you can. I don't want your shit anyway. But that feature isn't done yet.</p>
+<p><b>Are you making money off of this? Are you selling my shit?</b><br />Fuck no. I'm not making a goddamn cent. For serious, I'm not.</p>
+<p><b>How long do you keep posts?</b><br />The starting plan is to delete posts (read and unread) after 30 days unless they're starred.</p>
+<p><b>I'm seeing some posts more than once, why is that?</b><br />The feed retrieval mechanism caches posts based on a checksum of the post content. So if the post content changes, it thinks it's a new post. Maybe that's not the best way to do it, but I'm figuring it out.</p>
+<p><b>Why are some posts showing up as read before I've read them?</b><br />Post titles will display as "read" if you have already visited the URL of the original article, but will still technically be "unread" on here.</p>
+</div>
 </div>
 
 <div class="help-section">
