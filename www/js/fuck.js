@@ -12,13 +12,7 @@ $(document).ready(function() {
 		});
 	}
 	
-	if ($('body#feeds').length && $('#unread-feeds-count').length) {
-		document.title = '['+$('#unread-feeds-count').html()+'] ' + document.title;
-	}
-	
-	if ($('body#feed').length && $('#unread-feed-count').length) {
-		document.title = '['+$('#unread-feed-count').html()+'] ' + document.title;
-	}
+	updatePageTitle();
 	
 	// KEYBOARD SHORTCUTS, BECAUSE YEAH
 	window.addEventListener('keyup', function(e) {
@@ -35,6 +29,16 @@ $(document).ready(function() {
 	});
 	
 });
+
+function updatePageTitle() {
+	var doctitle = document.title.replace(/\[\d+\] /i, '');
+	if ($('body#feeds').length && $('#unread-feeds-count').length) {
+		document.title = '['+$('#unread-feeds-count').html()+'] ' + doctitle;
+	}
+	if ($('body#feed').length && $('#unread-feed-count').length) {
+		document.title = '['+$('#unread-feed-count').html()+'] ' + doctitle;
+	}
+}
 
 function postClickHandler(event) {
 	
@@ -58,10 +62,18 @@ function postClickHandler(event) {
 			$(this).removeClass('unread');
 			$(this).addClass('read');
 			$.get('/read/post/'+this_post_id+'/');
+			// reduce feeds unread count by 1
+			$('#unread-feeds-count').html( ($('#unread-feeds-count').html() * 1) - 1 );
+			if ($('#unread-feed-count').length) { $('#unread-feed-count').html( ($('#unread-feed-count').html() * 1) - 1 ); }
+			updatePageTitle();
 		} else if ($(this).hasClass('read')) {
 			$(this).removeClass('read');
 			$(this).addClass('unread');
 			$.get('/unread/post/'+this_post_id+'/');
+			// increase feeds unread count by 1
+			$('#unread-feeds-count').html( ($('#unread-feeds-count').html() * 1) + 1 );
+			if ($('#unread-feed-count').length) { $('#unread-feed-count').html( ($('#unread-feed-count').html() * 1) + 1 ); }
+			updatePageTitle();
 		}
 		
 	} else if ($(event.toElement).hasClass('star-this-post')) {
@@ -104,6 +116,10 @@ function postClickHandler(event) {
 			$(this).removeClass('unread');
 			$(this).addClass('read');
 			//$.get('/read/post/'+this_post_id+'/');
+			// reduce feeds unread count by 1
+			$('#unread-feeds-count').html( ($('#unread-feeds-count').html() * 1) - 1 );
+			if ($('#unread-feed-count').length) { $('#unread-feed-count').html( ($('#unread-feed-count').html() * 1) - 1 ); }
+			updatePageTitle();
 		}
 		
 	}
