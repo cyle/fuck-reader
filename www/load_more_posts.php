@@ -23,6 +23,12 @@ if (isset($_GET['read']) && trim($_GET['read']) == 'yup') {
 	$just_unread = true;
 }
 
+if (isset($_GET['starred']) && trim($_GET['starred']) == 'yup') {
+	$just_starred = true;
+} else {
+	$just_starred = false;
+}
+
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 	$selected_feed_id = (int) $_GET['id'] * 1;
 } else {
@@ -43,11 +49,17 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	<p>No feed posts to show you!</p>
 	<?php
 } else {
-	if ($selected_feed_id > 0) {
-		$all_posts = getFeedPosts($current_user_id, $selected_feed_id, $just_unread, $howmany, $offset);
+	
+	if ($just_starred) {
+		$all_posts = getStarredPosts($current_user_id, $howmany, $offset);
 	} else {
-		$all_posts = getAllPosts($current_user_id, $just_unread, $howmany, $offset);
+		if ($selected_feed_id > 0) {
+			$all_posts = getFeedPosts($current_user_id, $selected_feed_id, $just_unread, $howmany, $offset);
+		} else {
+			$all_posts = getAllPosts($current_user_id, $just_unread, $howmany, $offset);
+		}
 	}
+	
 	if (count($all_posts) > 0) {
 		foreach ($all_posts as $post) {
 			postBit($post, $users_feeds);

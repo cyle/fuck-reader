@@ -74,6 +74,36 @@ function getUsersFeeds($user_id = 0) {
 	
 }
 
+function getStarredPosts($user_id = 0, $howmany = 25, $offset = 0) {
+	
+	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
+		return false;
+	}
+	
+	$user_id = (int) $user_id * 1;
+	$feed_posts = array();
+	
+	global $mysqli, $necessary_posts_columns;
+	
+	$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read FROM posts 
+	LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' 
+	WHERE posts.post_id IN (SELECT post_id FROM users_star_posts WHERE user_id='.$user_id.') 
+	GROUP BY post_id 
+	ORDER BY posts.post_pubdate DESC 
+	LIMIT '.$howmany.' OFFSET '.$offset);
+	
+	if ($get_posts->num_rows == 0) {
+		return array();
+	} else {
+		while ($post = $get_posts->fetch_assoc()) {
+			$post['starred'] = true;
+			$feed_posts[] = $post;
+		}
+		return $feed_posts;
+	}
+	
+}
+
 function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true, $howmany = 25, $offset = 0) {
 	// get a feed's posts for a user, possibly get all of them
 	
@@ -92,9 +122,22 @@ function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true, $howmany 
 	global $mysqli, $necessary_posts_columns;
 	
 	if ($just_unread == true) {
-		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.' FROM posts WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_star_posts.row_id AS starred 
+		FROM posts 
+		LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
+		WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') 
+		GROUP BY post_id
+		ORDER BY posts.post_pubdate DESC 
+		LIMIT '.$howmany.' OFFSET '.$offset);
 	} else {
-		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read FROM posts LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' WHERE posts.feed_id='.$feed_id.' GROUP BY post_id ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read, users_star_posts.row_id AS starred 
+		FROM posts 
+		LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' 
+		LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
+		WHERE posts.feed_id='.$feed_id.' 
+		GROUP BY post_id 
+		ORDER BY posts.post_pubdate DESC 
+		LIMIT '.$howmany.' OFFSET '.$offset);
 	}
 	
 	if ($get_posts->num_rows == 0) {
@@ -121,16 +164,22 @@ function getAllPosts($user_id = 0, $just_unread = true, $howmany = 25, $offset =
 	global $mysqli, $necessary_posts_columns;
 	
 	if ($just_unread == true) {
-		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.' FROM posts WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY posts.post_pubdate DESC LIMIT '.$howmany.' OFFSET '.$offset);
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_star_posts.row_id AS starred 
+		FROM posts 
+		LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
+		WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') 
+		GROUP BY post_id 
+		ORDER BY posts.post_pubdate DESC 
+		LIMIT '.$howmany.' OFFSET '.$offset);
 	} else {
-		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read
-FROM posts
-LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id
-AND users_read_posts.user_id='.$user_id.'
-WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.')
-GROUP BY post_id
-ORDER BY posts.post_pubdate DESC 
-LIMIT '.$howmany.' OFFSET '.$offset);
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read, users_star_posts.row_id AS starred 
+		FROM posts
+		LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' 
+		LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
+		WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.')
+		GROUP BY post_id
+		ORDER BY posts.post_pubdate DESC 
+		LIMIT '.$howmany.' OFFSET '.$offset);
 	}
 	
 	if ($get_posts->num_rows == 0) {
@@ -146,7 +195,7 @@ LIMIT '.$howmany.' OFFSET '.$offset);
 function postBit($post = array(), $users_feeds = array()) {
 	// return post item for feed
 	
-	echo '<div class="post '.((isset($post['is_read'])) ? 'read': 'unread').'" id="post-'.$post['post_id'].'" data-post-id="'.$post['post_id'].'">'."\n";
+	echo '<div class="post'.((isset($post['is_read'])) ? ' read': ' unread').''.((isset($post['starred'])) ? ' starred': '').'" id="post-'.$post['post_id'].'" data-feed-id="'.$post['feed_id'].'" data-post-id="'.$post['post_id'].'">'."\n";
 	echo '<h3 class="post-header"><span class="star-this-post" title="star/unstar this post">&#10029;</span> <span class="mark-this-post" title="mark as read/unread">&#10004;</span> <a class="post-title" href="'.$post['post_permalink'].'" target="_blank">'.(($post['post_title'] != null) ? htmlspecialchars(strip_tags($post['post_title']), ENT_NOQUOTES, 'UTF-8') : 'Untitled').'</a></h3>'."\n";
 	echo '<div class="post-byline">Published <span class="post-pubdate">'.date('F jS, Y g:iA', $post['post_pubdate']).'</span> on <span class="post-feed-source">'.$users_feeds[$post['feed_id']].'</span></div>'."\n";
 	echo '<div class="post-content" style="display:none;" id="post-content-'.$post['post_id'].'">'."\n";
