@@ -125,6 +125,10 @@ div#main-column {
 	margin-bottom: 0;
 }
 
+#sidebar ul#list-of-feeds .zero-feed {
+	opacity: 0.5;
+}
+
 /* main column stuff */
 
 .feed-utils {
