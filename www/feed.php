@@ -21,6 +21,10 @@ require_once('../www-includes/dbconn_mysql.php');
 
 require_once('../www-includes/functions.php');
 
+$current_page = 1;
+$posts_per_page = 25;
+$posts_offset = ($current_page - 1) * $posts_per_page;
+
 // get list of user's feeds
 $users_feeds = getUsersFeeds($current_user_id);
 
@@ -39,7 +43,7 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	<p>No feed posts to show you!</p>
 	<?php
 } else {
-	$all_posts = getFeedPosts($current_user_id, $selected_feed_id, $just_unread);
+	$all_posts = getFeedPosts($current_user_id, $selected_feed_id, $just_unread, $posts_per_page, $posts_offset);
 	?>
 	<p class="feed-utils">
 	<?php if ($just_unread) { ?><a href="/feed/<?php echo $selected_feed_id; ?>/all/">Show All Posts</a><?php } else { ?><a href="/feed/<?php echo $selected_feed_id; ?>/">Show Unread Posts</a><?php } ?>
@@ -53,7 +57,9 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 		foreach ($all_posts as $post) {
 			postBit($post, $users_feeds);
 		}
-		echo '<div class="nav-next"><a href="/feed/'.$selected_feed_id.'/'.(($just_unread == false) ? 'all/' : '').'more/2/25/">load more</a></div>'."\n";
+		if (count($all_posts) >= $posts_per_page) {
+			echo '<div><a class="nav-next" href="/feed/'.$selected_feed_id.'/'.(($just_unread == false) ? 'all/' : '').'more/'.($current_page+1).'/'.$posts_per_page.'/">load more</a></div>'."\n";
+		}
 		echo '</div>';
 	}
 	

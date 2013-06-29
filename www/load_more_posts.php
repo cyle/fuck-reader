@@ -68,7 +68,7 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 			if ($selected_feed_id > 0) {
 				echo '<div class="nav-next"><a href="/feed/'.$selected_feed_id.'/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";
 			} else {
-				echo '<div class="nav-next"><a href="/feeds/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";	
+				echo '<div><a class="nav-next" href="/feeds/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";	
 			}
 		}
 	}

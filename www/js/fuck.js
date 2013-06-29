@@ -6,6 +6,7 @@ $(document).ready(function() {
 	// INFINITE SCROLL WHOOOAAAAAAA
 	if ($('div.feed-list').length) {
 		$('div.feed-list').jscroll({
+			nextSelector: 'a.nav-next',
 			callback: function() {
 				$('div.post').click(postClickHandler);
 			}

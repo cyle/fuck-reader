@@ -13,6 +13,10 @@ if (isset($_GET['read']) && trim($_GET['read']) == 'yup') {
 	$just_unread = true;
 }
 
+$current_page = 1;
+$posts_per_page = 25;
+$posts_offset = ($current_page - 1) * $posts_per_page;
+
 // get list of user's feeds
 $users_feeds = getUsersFeeds($current_user_id);
 
@@ -31,7 +35,7 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	<p>No feed posts to show you!</p>
 	<?php
 } else {
-	$all_posts = getAllPosts($current_user_id, $just_unread);
+	$all_posts = getAllPosts($current_user_id, $just_unread, $posts_per_page, $posts_offset);
 	?>
 	<p class="feed-utils">
 	<?php if ($just_unread) { ?><a href="/feeds/all/">Show All Posts</a><?php } else { ?><a href="/feeds/">Show Unread Posts</a><?php } ?>
@@ -45,7 +49,9 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 		foreach ($all_posts as $post) {
 			postBit($post, $users_feeds);
 		}
-		echo '<div class="nav-next"><a href="/feeds/'.(($just_unread == false) ? 'all/' : '').'more/2/25/">load more</a></div>'."\n";
+		if (count($all_posts) >= $posts_per_page) {
+			echo '<div><a class="nav-next" href="/feeds/'.(($just_unread == false) ? 'all/' : '').'more/'.($current_page+1).'/'.$posts_per_page.'/">load more</a></div>'."\n";
+		}
 		echo '</div>';
 	}
 }
