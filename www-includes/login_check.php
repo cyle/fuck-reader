@@ -79,6 +79,12 @@ if (isset($_COOKIE['fucksession']) && trim($_COOKIE['fucksession']) != '') { // 
 		$new_session_key_db = "'".$mysqli->escape_string($new_session_key)."'";
 		$new_session_row = $mysqli->query("INSERT INTO user_sessions (session_id, user_id, expires) VALUES ($new_session_key_db, $current_user_id, $new_session_key_expires)");
 		
+		// since i was a fool, change everyone's password to a new one with a unique salt...
+		$pwd_salt = substr(get_key(256), 0, 22); // make a new 22-character salt
+		$new_user_pwd_hash = crypt(trim($_POST['p']), '$2y$12$' . $pwd_salt);
+		$new_user_pwd_hash_db = "'".$mysqli->escape_string($new_user_pwd_hash)."'";
+		$update_users_password = $mysqli->query("UPDATE users SET pwrdlol=$new_user_pwd_hash_db WHERE user_id=$current_user_id");
+		
 		// logged in, cool -- send to /feeds/
 		header('Location: /feeds/');
 		die();
