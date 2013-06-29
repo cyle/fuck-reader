@@ -42,6 +42,8 @@ if (isset($_COOKIE['fucksession']) && trim($_COOKIE['fucksession']) != '') { // 
 		$new_session_key_expires = time() + (60*60*24*30);
 		setcookie('fucksession', $fuck_session_id, $new_session_key_expires, '/', 'fuckreader.com');
 		$update_session_expiry = $mysqli->query("UPDATE user_sessions SET expires=$new_session_key_expires WHERE session_id=$fuck_session_id_db");
+		// update last access time
+		$update_last_access = $mysqli->query("UPDATE users SET lastaccess=UNIX_TIMESTAMP() WHERE user_id=$current_user_id");
 		if ($_SERVER['PHP_SELF'] == 'login.php') {
 			header('Location: /feeds/');
 			die();
@@ -84,6 +86,9 @@ if (isset($_COOKIE['fucksession']) && trim($_COOKIE['fucksession']) != '') { // 
 		$new_user_pwd_hash = crypt(trim($_POST['p']), '$2y$12$' . $pwd_salt);
 		$new_user_pwd_hash_db = "'".$mysqli->escape_string($new_user_pwd_hash)."'";
 		$update_users_password = $mysqli->query("UPDATE users SET pwrdlol=$new_user_pwd_hash_db WHERE user_id=$current_user_id");
+		
+		// update last access time
+		$update_last_access = $mysqli->query("UPDATE users SET lastaccess=UNIX_TIMESTAMP() WHERE user_id=$current_user_id");
 		
 		// logged in, cool -- send to /feeds/
 		header('Location: /feeds/');
