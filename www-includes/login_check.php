@@ -15,6 +15,7 @@ function get_key($bit_length = 128){
 	if ($fp !== FALSE) {
 		$key = substr(base64_encode(@fread($fp,($bit_length + 7) / 8)), 0, (($bit_length + 5) / 6)  - 2);
 		@fclose($fp);
+		$key = str_replace(array('+', '/'), array('0', 'X'), $key);
 		return $key;
 	}
 	return null;
@@ -51,16 +52,18 @@ if (isset($_COOKIE['fucksession']) && trim($_COOKIE['fucksession']) != '') { // 
 	
 	require_once('dbconn_mysql.php');
 		
-	require_once('../config/login_config.php');
-	$pwd_attempt_hash = crypt(trim($_POST['p']), '$2y$12$' . $pwd_salt);
-	
 	$users_email_db = "'".$mysqli->escape_string(trim($_POST['e']))."'";
-	$pwd_attempt_hash_db = "'".$mysqli->escape_string($pwd_attempt_hash)."'";
 	
-	$check_for_user = $mysqli->query("SELECT * FROM users WHERE email=$users_email_db AND pwrdlol=$pwd_attempt_hash_db");
+	$check_for_user = $mysqli->query("SELECT * FROM users WHERE email=$users_email_db");
 	if ($check_for_user->num_rows == 1) {
-		// ok, cool
 		$current_user_row = $check_for_user->fetch_assoc();
+		
+		// check password
+		if (crypt(trim($_POST['p']), $current_user_row['pwrdlol']) != $current_user_row['pwrdlol']) {
+			die('Your password was incorrect, please try again.');
+		}
+		
+		// ok, cool
 		$current_user['loggedin'] = true;
 		$current_user['user_id'] = (int) $current_user_row['user_id'] * 1;
 		$current_user_id = $current_user['user_id'];
@@ -76,7 +79,7 @@ if (isset($_COOKIE['fucksession']) && trim($_COOKIE['fucksession']) != '') { // 
 		header('Location: /feeds/');
 		die();
 	} else {
-		die('Could not find that email and/or wrong password, sorry. Try again, I guess.');
+		die('Could not find that email address, sorry. Try again, I guess.');
 	}
 				
 } else if (isset($login_required) && $login_required == true) {

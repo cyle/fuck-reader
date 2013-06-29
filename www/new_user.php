@@ -26,6 +26,18 @@ if (trim($_POST['p1']) != trim($_POST['p2'])) {
 	die('your passwords do not match, goddamn.');
 }
 
+// generate a random key from /dev/random
+function get_key($bit_length = 128) {
+	$fp = @fopen('/dev/urandom','rb'); // should be /dev/random but it's too slow
+	if ($fp !== FALSE) {
+		$key = substr(base64_encode(@fread($fp,($bit_length + 7) / 8)), 0, (($bit_length + 5) / 6)  - 2);
+		@fclose($fp);
+		$key = str_replace(array('+', '/'), array('0', 'X'), $key);
+		return $key;
+	}
+	return null;
+}
+
 require_once('../www-includes/dbconn_mysql.php');
 
 // check invite code...
@@ -45,7 +57,7 @@ if ($check_for_email->num_rows > 0) {
 	die('sorry, but that email address appears to already be in use.');
 }
 
-$pwd_salt = 'BnvOuRHx6CKhiOZUm0BmKH';
+$pwd_salt = substr(get_key(256), 0, 22); // make a new 22-character salt
 $new_user_pwd_hash = crypt(trim($_POST['p1']), '$2y$12$' . $pwd_salt);
 $new_user_pwd_hash_db = "'".$mysqli->escape_string($new_user_pwd_hash)."'";
 
