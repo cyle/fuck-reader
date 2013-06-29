@@ -46,6 +46,10 @@ if (isset($_COOKIE['fucksession']) && trim($_COOKIE['fucksession']) != '') { // 
 			header('Location: /feeds/');
 			die();
 		}
+	} else {
+		// session is expired, make them log in again!
+		header('Location: /logout/');
+		die();
 	}
 	
 } else if (isset($_POST['e']) && isset($_POST['p'])) { // user is trying to log in?
