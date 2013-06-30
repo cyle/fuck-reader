@@ -306,15 +306,93 @@ div#footer a {
 	line-height: 1.8;
 }
 
+/* stuff just for desktop */
+
+@media only screen and (min-width: 500px) {
+	
+	span.mobile-feed-list-toggle {
+		display: none;
+	}
+	
+}
+
 /* stuff for mobile */
 
 @media only screen and (max-width: 500px) {
+	
 	#lolwut {
 		margin: 50px 10px;
 		width: auto;
 		font-size: 12px;
 	}
+
 	#lolwut h1 {
 		font-size: 4em;
 	}
+	
+	div#sidebar {
+		float: none;
+		width: auto;
+	}
+	
+	div#main-column {
+		margin-left: 0;
+		padding: 7px;
+	}
+	
+	body.mobile-hide-sidebar div#sidebar {
+		display: none;
+		float: none;
+		width: auto;
+	}
+	
+	body.mobile-hide-sidebar div#main-column {
+		margin-left: 0;
+		padding: 0;
+	}
+	
+	p.feed-utils {
+		padding: 7px;
+	}
+	
+	div.post div.post-content {
+		margin: 0px;
+		padding: 7px;
+		width: auto;
+	}
+	
+	div.post div.post-content img, div.post div.post-content iframe {
+		max-width: 100%;
+		height: auto;
+	}
+	
+	body#help div#faq-answers {
+		width: auto;
+	}
+	
+	div#footer {
+		position: static;
+	}
+	
+	#login-prompt, #register-prompt {
+		width: auto;
+		margin: 0;
+		padding: 10px;
+	}
+	
+	#login-prompt input, #register-prompt input {
+		padding: 3px;
+		width: auto;
+		margin-bottom: 7px;
+	}
+	
+	#register-prompt label {
+		display: inline-block;
+		width: 100px;
+	}
+	
+	#register-prompt input {
+		width: auto;
+	}
+	
 }

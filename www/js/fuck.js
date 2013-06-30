@@ -29,6 +29,17 @@ $(document).ready(function() {
 		*/
 	});
 	
+	$('a.toggle-feed-list').click(function(e) {
+		e.preventDefault();
+		$('div#sidebar').toggle();
+		if ($(this).html() == 'Show Feed List') {
+			$(this).html('Hide Feed List');
+		} else {
+			$(this).html('Show Feed List');
+		}
+		window.scrollTo(0, 0);
+	});
+	
 });
 
 function updatePageTitle() {
