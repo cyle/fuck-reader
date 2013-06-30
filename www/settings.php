@@ -59,6 +59,29 @@ if ($get_invites->num_rows > 0) {
 </div>
 
 <div class="settings-section">
+<h3>Your Active Sessions</h3>
+<?php
+$get_active_sessions = $mysqli->query("SELECT session_id FROM user_sessions WHERE user_id=$current_user_id");
+?>
+<p>You currently have <?php echo $get_active_sessions->num_rows; ?> active sessions.</p>
+<p><a href="/user/clear/sessions/">Click here to clear them all and force re-login.</a></p>
+<p>Do this if you've lost track of where you're logged in.</p>
+</div>
+
+<div class="settings-section">
+<h3>Change Your Password</h3>
+<p>Note: this will invalidate all of your currently active sessions, forcing you to re-login.</p>
+<form action="/user/change/password/" method="post" id="change-pwd-form">
+<table>
+<tr><td>Current password:</td><td><input type="password" /></td></tr>
+<tr><td>New password:</td><td><input type="password" /></td></tr>
+<tr><td>New password (again):</td><td><input type="password" /></td></tr>
+<tr><td colspan="2"><input type="submit" value="Change it &raquo;" /></td></tr>
+</table>
+</form>
+</div>
+
+<div class="settings-section">
 <h3>Delete Fucking Everything</h3>
 <p>Not done yet, sorry.</p>
 <!--
