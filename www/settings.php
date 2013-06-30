@@ -73,9 +73,9 @@ $get_active_sessions = $mysqli->query("SELECT session_id FROM user_sessions WHER
 <p>Note: this will invalidate all of your currently active sessions, forcing you to re-login.</p>
 <form action="/user/change/password/" method="post" id="change-pwd-form">
 <table>
-<tr><td>Current password:</td><td><input type="password" /></td></tr>
-<tr><td>New password:</td><td><input type="password" /></td></tr>
-<tr><td>New password (again):</td><td><input type="password" /></td></tr>
+<tr><td>Current password:</td><td><input type="password" name="cp" /></td></tr>
+<tr><td>New password:</td><td><input type="password" name="p1" /></td></tr>
+<tr><td>New password (again):</td><td><input type="password" name="p2" /></td></tr>
 <tr><td colspan="2"><input type="submit" value="Change it &raquo;" /></td></tr>
 </table>
 </form>
