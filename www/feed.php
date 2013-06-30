@@ -46,6 +46,7 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	$all_posts = getFeedPosts($current_user_id, $selected_feed_id, $just_unread, $posts_per_page, $posts_offset);
 	?>
 	<p class="feed-utils">
+	<span class="feed-title"><?php echo getFeedTitle($selected_feed_id); ?></span> - 
 	<?php if ($just_unread) { ?><a href="/feed/<?php echo $selected_feed_id; ?>/all/">Show All Posts</a><?php } else { ?><a href="/feed/<?php echo $selected_feed_id; ?>/">Show Unread Posts</a><?php } ?>
 	<?php if (count($all_posts) > 0 && $just_unread) { ?> - <a href="/read/feed/<?php echo $selected_feed_id; ?>/<?php echo time(); ?>/">Mark Every Single Goddamn Post in This Feed as <b>Read</b></a><?php } ?>
 	</p>

@@ -135,6 +135,10 @@ div#main-column {
 	margin-bottom: 15px;
 }
 
+span.feed-title {
+	font-weight: bold;
+}
+
 body#help div#faq-answers {
 	width: 500px;
 }

@@ -205,4 +205,22 @@ function postBit($post = array(), $users_feeds = array()) {
 	
 }
 
+function getFeedTitle($feed_id = 0) {
+	if (!isset($feed_id) || $feed_id == 0 || !is_numeric($feed_id)) {
+		return false;
+	}
+	
+	$feed_id = (int) $feed_id * 1;
+	
+	global $mysqli;
+	
+	$get_feed_title = $mysqli->query("SELECT feed_title FROM feeds WHERE feed_id=$feed_id");
+	if (!$get_feed_title || $get_feed_title->num_rows == 0) {
+		return false;
+	} else {
+		$feed_title_result = $get_feed_title->fetch_assoc();
+		return $feed_title_result['feed_title'];
+	}
+}
+
 ?>

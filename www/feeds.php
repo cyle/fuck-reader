@@ -38,6 +38,7 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	$all_posts = getAllPosts($current_user_id, $just_unread, $posts_per_page, $posts_offset);
 	?>
 	<p class="feed-utils">
+	<span class="feed-title">All feeds</span> - 
 	<?php if ($just_unread) { ?><a href="/feeds/all/">Show All Posts</a><?php } else { ?><a href="/feeds/">Show Unread Posts</a><?php } ?>
 	<?php if (count($all_posts) > 0 && $just_unread) { ?> - <a href="/read/all/<?php echo time(); ?>/">Mark Every Single Goddamn Post in ALL FEEDS as <b>Read</b></a><?php } ?>
 	</p>
