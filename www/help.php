@@ -77,6 +77,10 @@ require_once('head.php');
 <p>For now, send me a goddamn tweet: <a target="_blank" href="http://twitter.com/cylegage">@cylegage</a></p>
 </div>
 
+<div class="help-section">
+<h3>View some stats...</h3>
+<p><a href="/stats/">oh shit...</a></p>
+</div>
 
 </div>
 <?php require_once('footer.php'); ?>
