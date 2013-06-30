@@ -46,6 +46,6 @@ Make a logs directory alongside www and www-includes and whatnot:
 Put this in your crontab file:
 
     */5 * * * * cd /path/to/fuckreader/ruby; /usr/bin/ruby getfeeds.rb > ../logs/feeds.log
-    0 3 * * * cd /path/to/fuckreader/www-includes; php cleanup.php > ../logs/cleanup.log
+    0 3 * * * cd /path/to/fuckreader/www-includes; /usr/bin/php cleanup.php > ../logs/cleanup.log
     
 You're free to set it to whatever frequency you want.
