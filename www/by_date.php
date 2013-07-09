@@ -9,7 +9,7 @@ if (!isset($_GET['d']) || trim($_GET['d']) == '' || preg_match('/^(\d+)-(\d+)-(\
 	die('need a date to look up posts for!');
 }
 
-$the_date = strtotime(trim($_GET['d']));
+$the_date = strtotime(trim($_GET['d']) . ' 12:00:00 AM');
 
 if (!$the_date) {
 	die('invalid date given!');
@@ -51,7 +51,9 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	?>
 	<p class="feed-utils">
 	<span class="mobile-feed-list-toggle"><a href="#" class="toggle-feed-list">Show Feed List</a><br /></span>
+	<a href="/feeds/<?php echo date('Y-m-d', ($the_date - 86400)); ?>/">&laquo; prev day</a> - 
 	<span class="feed-title">All feeds on <?php echo date('F jS, Y', $the_date); ?></span>
+	<?php if ($the_date + 86400 < time()) { ?> - <a href="/feeds/<?php echo date('Y-m-d', ($the_date + 86400)); ?>/">next day &raquo;</a><?php } ?>
 	<!-- 
 	<?php if ($just_unread) { ?> - <a href="/feeds/all/">Show All Posts</a><?php } else { ?><a href="/feeds/">Show Unread Posts</a><?php } ?>
 	<?php if (count($all_posts) > 0 && $just_unread) { ?> - <a href="/read/all/<?php echo time(); ?>/">Mark Every Single Goddamn Post in ALL FEEDS as <b>Read</b></a><?php } ?>
