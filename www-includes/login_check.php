@@ -19,14 +19,14 @@ if (isset($_COOKIE['fucksession']) && trim($_COOKIE['fucksession']) != '') { // 
 	
 	require_once('dbconn_mysql.php');
 	
-	$new_session_complete_token = trim($_COOKIE['fucksession']);
-	if (strpos($new_session_complete_token, ':') === false) {
+	$fuck_session_complete_token = trim($_COOKIE['fucksession']);
+	if (strpos($fuck_session_complete_token, ':') === false) {
 		// using the old session ID
 		header('Location: /logout/');
 		die();
 	} else {
 		// using the new session key/secret system
-		$fuck_session_pieces = explode(':', $new_session_complete_token);
+		$fuck_session_pieces = explode(':', $fuck_session_complete_token);
 		$fuck_session_key_db = "'".$mysqli->escape_string($fuck_session_pieces[0])."'";
 		$check_for_session = $mysqli->query("SELECT * FROM user_sessions WHERE session_key=$fuck_session_key_db AND expires > UNIX_TIMESTAMP()");
 		if ($check_for_session->num_rows == 1) {
@@ -43,7 +43,7 @@ if (isset($_COOKIE['fucksession']) && trim($_COOKIE['fucksession']) != '') { // 
 			$current_user['loggedin'] = true;
 			$current_user['user_id'] = $current_user_id;
 			$new_session_key_expires = time() + (60*60*24*30);
-			setcookie('fucksession', $new_session_complete_token, $new_session_key_expires, '/', 'fuckreader.com');
+			setcookie('fucksession', $fuck_session_complete_token, $new_session_key_expires, '/', 'fuckreader.com');
 			$update_session_expiry = $mysqli->query("UPDATE user_sessions SET expires=$new_session_key_expires WHERE session_key=$fuck_session_key_db AND user_id=$current_user_id");
 			// update last access time
 			$update_last_access = $mysqli->query("UPDATE users SET lastaccess=UNIX_TIMESTAMP() WHERE user_id=$current_user_id");
