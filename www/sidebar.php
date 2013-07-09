@@ -15,6 +15,18 @@ if (!isset($users_feeds) || $users_feeds == false || count($users_feeds) == 0) {
 	<li><a href="/feeds/"<?php echo ((isset($just_unread) && $just_unread == true && !isset($selected_feed_id)) ? ' class="active"' : ''); ?>>Show All <span id="unread-feeds-count"><?php echo getAllUnreadCount($current_user_id); ?></span> Unread Posts</a></li>
 	<li><a href="/feeds/all/"<?php echo ((isset($just_unread) && $just_unread == false && !isset($selected_feed_id)) ? ' class="active"': ''); ?>>Show All Posts, even Read</a></li>
 	<li><a href="/starred/">Show Only Starred Posts</a></li>
+	<li>Your Feeds By Day:</li>
+	<ul>
+		<?php
+		$oldest_date = getOldestUnreadPost($current_user_id);
+		if ($oldest_date > 0) {
+			$first_day_ts = strtotime(date('Y-m-d', $oldest_date) . ' 12:00:00 AM');
+			for ($current_ts = $first_day_ts; $current_ts < time(); $current_ts += 86400) {
+				echo '<li>['.getDateAllUnreadCount($current_user_id, $current_ts).'] <a href="/feeds/'.date('Y-m-d', $current_ts).'/">'.date('m-d-Y', $current_ts).'</a></li>'."\n";
+			}
+		}
+		?>
+	</ul>
 	<li>Your Feeds:</li>
 	<ul id="list-of-feeds">
 	<?php

@@ -49,6 +49,68 @@ function getFeedUnreadCount($user_id = 0, $feed_id = 0) {
 	
 }
 
+function getDateAllUnreadCount($user_id = 0, $the_date = null) {
+	
+	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
+		return false;
+	}
+	
+	if (!isset($the_date) || trim($the_date) == '') {
+		return false;
+	}
+	
+	if (!is_numeric($the_date)) {
+		$the_date = strtotime($the_date);
+	}
+	
+	if (!$the_date) {
+		return false;
+	}
+	
+	$user_id = (int) $user_id * 1;
+	
+	$the_date_base = date('Y-m-d', $the_date);
+	$the_date_start = $the_date_base . ' 12:00:00 AM';
+	$the_date_end = $the_date_base . ' 11:59:59 PM';
+	$the_date_start_db = strtotime($the_date_start);
+	$the_date_end_db = strtotime($the_date_end);
+	
+	global $mysqli;
+	
+	$get_count = $mysqli->query('SELECT count(post_id) AS postcount FROM posts WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') AND post_pubdate >= '.$the_date_start_db.' AND post_pubdate < '.$the_date_end_db.'');
+	$count_result = $get_count->fetch_assoc();
+	
+	return $count_result['postcount'];
+	
+}
+
+
+
+function getOldestUnreadPost($user_id = 0) {
+	
+	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
+		return false;
+	}
+	
+	$user_id = (int) $user_id * 1;
+	
+	global $mysqli;
+	
+	$get_oldest_unread = $mysqli->query('SELECT post_pubdate FROM posts WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') ORDER BY post_pubdate ASC LIMIT 1 ');
+	if ($get_oldest_unread->num_rows == 0) {
+		return 0;
+	} else {
+		$oldest_unread_result = $get_oldest_unread->fetch_assoc();
+		return $oldest_unread_result['post_pubdate'];
+	}
+	
+}
+
+
+
+
+
+
 function getUsersFeeds($user_id = 0) {
 	// get feed IDs for user, return array
 	
