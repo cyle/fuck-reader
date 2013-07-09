@@ -23,7 +23,6 @@ if (isset($_GET['all']) && trim($_GET['all']) == 'yup') {
 	}
 	//echo 'ok';
 	header('Location: /feeds/'); // send user back to /feeds/ for now
-	
 } else if (isset($_GET['fid']) && is_numeric($_GET['fid'])) {
 	// declare all of the users' unread posts from this feed ID read
 	$feed_id = (int) $_GET['fid'] * 1;
@@ -35,6 +34,24 @@ if (isset($_GET['all']) && trim($_GET['all']) == 'yup') {
 	}
 	//echo 'ok';
 	header('Location: /feed/'.$feed_id.'/'); // send user back to /feeds/ for now
+} else if (isset($_GET['d']) && trim($_GET['d']) != '') {
+	// declare all posts for a certain day as read!
+	if (preg_match('/^(\d+)-(\d+)-(\d+)$/', trim($_GET['d'])) == false || strtotime(trim($_GET['d'])) == false) {
+		die('invalid date given');
+	}
+	$the_date = strtotime(trim($_GET['d']));
+	$the_date_base = date('Y-m-d', $the_date);
+	$the_date_start = $the_date_base . ' 12:00:00 AM';
+	$the_date_end = $the_date_base . ' 11:59:59 PM';
+	$the_date_start_db = strtotime($the_date_start);
+	$the_date_end_db = strtotime($the_date_end);
+	$get_dates_post_ids = $mysqli->query("SELECT post_id FROM posts WHERE post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id=$current_user_id) AND post_pubdate >= $the_date_start_db AND post_pubdate < $the_date_end_db");
+	// mark all of those posts as read
+	while ($unread_post = $get_dates_post_ids->fetch_assoc()) {
+		$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, ".$unread_post['post_id'].", UNIX_TIMESTAMP())");
+	}
+	//echo 'ok';
+	header('Location: /feeds/'.date('Y-m-d', $the_date).'/'); // send user back to /feeds/ for now
 } else if (isset($_GET['pid']) && is_numeric($_GET['pid'])) {
 	// declare this individual post read
 	$post_id = (int) $_GET['pid'] * 1;

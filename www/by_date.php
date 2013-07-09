@@ -56,8 +56,8 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 	<?php if ($the_date + 86400 < time()) { ?> - <a href="/feeds/<?php echo date('Y-m-d', ($the_date + 86400)); ?>/">next day &raquo;</a><?php } ?>
 	<!-- 
 	<?php if ($just_unread) { ?> - <a href="/feeds/all/">Show All Posts</a><?php } else { ?><a href="/feeds/">Show Unread Posts</a><?php } ?>
-	<?php if (count($all_posts) > 0 && $just_unread) { ?> - <a href="/read/all/<?php echo time(); ?>/">Mark Every Single Goddamn Post in ALL FEEDS as <b>Read</b></a><?php } ?>
 	-->
+	<?php if (count($all_posts) > 0 && $just_unread) { ?> - <a href="/read/<?php echo date('Y-m-d', $the_date); ?>/">Mark Every Single Goddamn Post for THIS DAY as <b>Read</b></a><?php } ?>
 	</p>
 	<?php
 	if (count($all_posts) == 0) {
