@@ -22,7 +22,7 @@ if (!isset($users_feeds) || $users_feeds == false || count($users_feeds) == 0) {
 		if ($oldest_date > 0) {
 			$first_day_ts = strtotime(date('Y-m-d', $oldest_date) . ' 12:00:00 AM');
 			for ($current_ts = $first_day_ts; $current_ts < time(); $current_ts += 86400) {
-				echo '<li>['.getDateAllUnreadCount($current_user_id, $current_ts).'] <a href="/feeds/'.date('Y-m-d', $current_ts).'/">'.date('m-d-Y', $current_ts).'</a></li>'."\n";
+				echo '<li>['.((isset($the_date) && date('Y-m-d', $the_date) == date('Y-m-d', $current_ts)) ? '<span id="unread-date-count">' : '').getDateAllUnreadCount($current_user_id, $current_ts).((isset($the_date) && date('Y-m-d', $the_date) == date('Y-m-d', $current_ts)) ? '</span>': '').'] <a href="/feeds/'.date('Y-m-d', $current_ts).'/"'.((isset($the_date) && date('Y-m-d', $the_date) == date('Y-m-d', $current_ts)) ? ' class="active"': '').'>'.date('m-d-Y', $current_ts).'</a></li>'."\n";
 			}
 		}
 		?>

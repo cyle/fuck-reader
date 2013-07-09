@@ -47,6 +47,9 @@ function updatePageTitle() {
 	if ($('body#feeds').length && $('#unread-feeds-count').length) {
 		document.title = '['+$('#unread-feeds-count').html()+'] ' + doctitle;
 	}
+	if ($('body#feeds-by-date').length && $('#unread-date-count').length) {
+		document.title = '['+$('#unread-date-count').html()+'] ' + doctitle;
+	}
 	if ($('body#feed').length && $('#unread-feed-count').length) {
 		document.title = '['+$('#unread-feed-count').html()+'] ' + doctitle;
 	}
@@ -77,6 +80,7 @@ function postClickHandler(event) {
 			// reduce feeds unread count by 1
 			$('#unread-feeds-count').html( ($('#unread-feeds-count').html() * 1) - 1 );
 			if ($('#unread-feed-count').length) { $('#unread-feed-count').html( ($('#unread-feed-count').html() * 1) - 1 ); }
+			if ($('#unread-date-count').length) { $('#unread-date-count').html( ($('#unread-date-count').html() * 1) - 1 ); }
 			updatePageTitle();
 		} else if ($(this).hasClass('read')) {
 			$(this).removeClass('read');
@@ -85,6 +89,7 @@ function postClickHandler(event) {
 			// increase feeds unread count by 1
 			$('#unread-feeds-count').html( ($('#unread-feeds-count').html() * 1) + 1 );
 			if ($('#unread-feed-count').length) { $('#unread-feed-count').html( ($('#unread-feed-count').html() * 1) + 1 ); }
+			if ($('#unread-date-count').length) { $('#unread-date-count').html( ($('#unread-date-count').html() * 1) - 1 ); }
 			updatePageTitle();
 		}
 		
