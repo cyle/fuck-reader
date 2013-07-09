@@ -8,6 +8,7 @@ ini_set('default_charset', 'utf-8');
 <meta charset="UTF-8">
 <?php
 if (isset($page_title) && $page_title != '') {
+	$page_title = str_replace('-', ' ', $page_title);
 	echo '<title>'.strtoupper($page_title).' - FUCK READER</title>'."\n";
 } else {
 	echo '<title>FUCK READER</title>'."\n";

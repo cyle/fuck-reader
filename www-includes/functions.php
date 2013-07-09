@@ -192,6 +192,67 @@ function getAllPosts($user_id = 0, $just_unread = true, $howmany = 25, $offset =
 	}
 }
 
+function getAllPostsByDate($user_id = 0, $the_date = null, $just_unread = true, $howmany = 25, $offset = 0) {
+	
+	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
+		return false;
+	}
+	
+	if (!isset($the_date) || trim($the_date) == '') {
+		return false;
+	}
+	
+	if (!is_numeric($the_date)) {
+		$the_date = strtotime($the_date);
+	}
+	
+	if (!$the_date) {
+		return false;
+	}
+	
+	$user_id = (int) $user_id * 1;
+	
+	$the_date_base = date('Y-m-d', $the_date);
+	$the_date_start = $the_date_base . ' 12:00:00 AM';
+	$the_date_end = $the_date_base . ' 11:59:59 PM';
+	$the_date_start_db = strtotime($the_date_start);
+	$the_date_end_db = strtotime($the_date_end);
+	
+	$feeds_posts = array();
+	
+	global $mysqli, $necessary_posts_columns;
+	
+	if ($just_unread == true) {
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_star_posts.row_id AS starred 
+		FROM posts 
+		LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
+		WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') 
+		AND posts.post_pubdate >= '.$the_date_start_db.' AND posts.post_pubdate < '.$the_date_end_db.' 
+		GROUP BY post_id 
+		ORDER BY posts.post_pubdate DESC 
+		LIMIT '.$howmany.' OFFSET '.$offset);
+	} else {
+		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read, users_star_posts.row_id AS starred 
+		FROM posts
+		LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' 
+		LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
+		WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') 
+		AND posts.post_pubdate >= '.$the_date_start_db.' AND posts.post_pubdate < '.$the_date_end_db.' 
+		GROUP BY post_id
+		ORDER BY posts.post_pubdate DESC 
+		LIMIT '.$howmany.' OFFSET '.$offset);
+	}
+	
+	if ($get_posts->num_rows == 0) {
+		return array();
+	} else {
+		while ($post = $get_posts->fetch_assoc()) {
+			$feeds_posts[] = $post;
+		}
+		return $feeds_posts;
+	}
+}
+
 function postBit($post = array(), $users_feeds = array()) {
 	// return post item for feed
 	

@@ -35,6 +35,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 	$selected_feed_id = 0;
 }
 
+if (isset($_GET['d']) && trim($_GET['d']) != '' && preg_match('/^(\d+)-(\d+)-(\d+)$/', $_GET['d']) != false) {
+	$the_date = strtotime(trim($_GET['d']));
+	if (!$the_date) {
+		die('invalid date given!');
+	}
+} else {
+	$the_date = 0;
+}
+
 $offset = $howmany * ($page - 1);
 
 require_once('../www-includes/dbconn_mysql.php');
@@ -56,7 +65,11 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 		if ($selected_feed_id > 0) {
 			$all_posts = getFeedPosts($current_user_id, $selected_feed_id, $just_unread, $howmany, $offset);
 		} else {
-			$all_posts = getAllPosts($current_user_id, $just_unread, $howmany, $offset);
+			if ($the_date > 0) {
+				$all_posts = getAllPostsByDate($current_user_id, $the_date, $just_unread, $howmany, $offset);
+			} else {
+				$all_posts = getAllPosts($current_user_id, $just_unread, $howmany, $offset);
+			}
 		}
 	}
 	
@@ -68,7 +81,11 @@ if ($users_feeds == false || count($users_feeds) == 0) {
 			if ($selected_feed_id > 0) {
 				echo '<div class="nav-next"><a href="/feed/'.$selected_feed_id.'/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";
 			} else {
-				echo '<div><a class="nav-next" href="/feeds/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";	
+				if ($the_date > 0) {
+					echo '<div><a class="nav-next" href="/feeds/'.date('Y-m-d', $the_date).'/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";	
+				} else {
+					echo '<div><a class="nav-next" href="/feeds/'.(($just_unread == false) ? 'all/' : '').'more/'.($page+1).'/'.$howmany.'/">load more</a></div>'."\n";	
+				}
 			}
 		}
 	}
