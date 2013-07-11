@@ -81,7 +81,12 @@ feed_urls.each { |feed_info|
 			
 			if entry.content.nil? and entry.summary.nil?
 				# shit -- both are nil? wtf
-				entry_content_hash = "both summary and content are nil"
+				#entry_content_hash = "both summary and content are nil"
+				unless entry.title.nil?
+					entry_content_hash = Digest::SHA1.hexdigest entry.title
+				else
+					entry_content_hash = Digest::SHA1.hexdigest entry.url
+				end
 			elsif entry.content.nil? == false and entry.summary.nil?
 				# content is available
 				entry_content_hash = Digest::SHA1.hexdigest entry.content
@@ -110,7 +115,9 @@ feed_urls.each { |feed_info|
 				entry_guid_db = "'" + (Digest::SHA1.hexdigest entry.url) + "'"
 				entry_link_db = "'" + dbclient.escape(entry.url) + "'"
 				
-				if entry.content.nil?
+				if entry.content.nil? and entry.summary.nil?
+					entry_content_db = "'" + dbclient.escape("'No content.'") + "'"
+				elsif entry.content.nil? and !entry.summary.nil?
 					entry_content_db = "'" + dbclient.escape(entry.summary) + "'"
 				else
 					entry_content_db = "'" + dbclient.escape(entry.content) + "'"
