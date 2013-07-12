@@ -61,7 +61,7 @@ if ($get_invites->num_rows > 0) {
 <div class="settings-section">
 <h3>Your Active Sessions</h3>
 <?php
-$get_active_sessions = $mysqli->query("SELECT session_id FROM user_sessions WHERE user_id=$current_user_id");
+$get_active_sessions = $mysqli->query("SELECT session_key FROM user_sessions WHERE user_id=$current_user_id");
 ?>
 <p>You currently have <?php echo $get_active_sessions->num_rows; ?> active sessions.</p>
 <p><a href="/user/clear/sessions/">Click here to clear them all and force re-login.</a></p>
