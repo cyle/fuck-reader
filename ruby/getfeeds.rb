@@ -102,7 +102,17 @@ feed_urls.each { |feed_info|
 			puts "Entry hash: " + entry_content_hash
 			
 			# check to see if this entry's hash has already been recorded
-			dbchkresults = dbclient.query("SELECT post_id FROM posts WHERE chksum='"+entry_content_hash+"' AND feed_id=" + feed_info["feed_id"].to_s)
+			#dbchk_query = "SELECT post_id FROM posts WHERE chksum='"+entry_content_hash+"' AND feed_id=" + feed_info["feed_id"].to_s)
+			
+			# try this dbchk query instead:
+			dbchk_query = "SELECT post_id FROM posts WHERE feed_id="+feed_info["feed_id"].to_s+" AND post_guid='"+(Digest::SHA1.hexdigest entry.url)+"' AND "
+			if entry.title.nil?
+				dbchk_query = dbchk_query + "post_title IS NULL"
+			else
+				dbchk_query = dbchk_query + "post_title='" + dbclient.escape(entry.title) + "'"
+			end
+			
+			dbchkresults = dbclient.query(dbchk_query)
 			unless dbchkresults.count > 0
 				# okay, save this entry to the database, since it's new
 				
