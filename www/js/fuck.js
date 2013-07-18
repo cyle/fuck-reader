@@ -111,6 +111,10 @@ function postClickHandler(event) {
 		// hide all other open posts
 		$('div.post-content').not($(this).find('div.post-content')).hide();
 		
+		// show a loading gif, you know
+		$(this).find('div.post-content').html('<img width="16" height="11" src="/img/loading.gif" title="LOADING, LOL..." />');
+		$(this).find('div.post-content').show();
+		
 		// otherwise, open the post if it's clicked on, and mark it as read
 		
 		$.ajax({
@@ -122,7 +126,7 @@ function postClickHandler(event) {
 					console.log(data);
 				} else {
 					$('div.post-content#post-content-'+this_post_id).html(data.content);
-					$('div.post-content#post-content-'+this_post_id).show();
+					//$('div.post-content#post-content-'+this_post_id).show();
 				}
 			},
 			error: function(jqxhr, status, err) {
