@@ -16,7 +16,7 @@ if (isset($_GET['ts']) && is_numeric($_GET['ts'])) {
 if (isset($_GET['all']) && trim($_GET['all']) == 'yup') {
 	// declare all of the users' unread posts read
 	// get all posts for this user older than NOW that are unread by the user
-	$get_all_unread_post_ids = $mysqli->query("SELECT post_id FROM posts WHERE ts < $before_ts AND post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id=$current_user_id)");
+	$get_all_unread_post_ids = $mysqli->query("SELECT post_id FROM posts WHERE ts < $before_ts AND feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id=$current_user_id) AND post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id=$current_user_id)");
 	// mark all of those posts as read
 	while ($unread_post = $get_all_unread_post_ids->fetch_assoc()) {
 		$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, ".$unread_post['post_id'].", UNIX_TIMESTAMP())");
