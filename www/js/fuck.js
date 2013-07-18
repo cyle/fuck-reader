@@ -8,6 +8,7 @@ $(document).ready(function() {
 		$('div.feed-list').jscroll({
 			nextSelector: 'a.nav-next',
 			callback: function() {
+				$('div.post').off('click');
 				$('div.post').click(postClickHandler);
 			}
 		});
