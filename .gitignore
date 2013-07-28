@@ -3,3 +3,4 @@ dbconn.yml
 ruby/test
 config/google_analytics.php
 www/tests
+dbconn_redis.php

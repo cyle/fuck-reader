@@ -2,11 +2,6 @@
 
 // the necessary functions
 
-
-
-// no "unread" functionality yet
-
-
 $necessary_posts_columns = 'posts.post_id, posts.feed_id, posts.post_title, posts.post_guid, posts.post_permalink, posts.post_byline, posts.post_pubdate, posts.ts';
 
 require_once('dbconn_mysql.php');
