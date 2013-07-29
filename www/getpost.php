@@ -10,6 +10,7 @@ if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
 $post_id = (int) $_GET['pid'] * 1;
 
 require_once('../www-includes/dbconn_mysql.php');
+require_once('../www-includes/dbconn_redis.php');
 
 $get_post = $mysqli->query('SELECT * FROM posts WHERE post_id='.$post_id);
 if (!$get_post || $get_post->num_rows == 0) {
@@ -54,6 +55,8 @@ if (isset($current_user_id) && is_numeric($current_user_id)) {
 	if ($check_for_if_read->num_rows == 0) {
 		$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, $post_id, UNIX_TIMESTAMP())");
 	}
+	// insert into redis
+	$mark_redis = $redis->sadd('postsread:'.$current_user_id, $post_id);
 }
 
 ?>

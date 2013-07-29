@@ -15,6 +15,7 @@
 
 require 'nokogiri'
 require 'feedzirra'
+require 'redis'
 require 'mysql2'
 require 'yaml'
 require 'digest/sha1'
@@ -37,8 +38,21 @@ puts ""
 # set up the database connection
 dbclient = Mysql2::Client.new(:host => dbconfig["database"]["dbhost"], :username => dbconfig["database"]["dbuser"], :password => dbconfig["database"]["dbpass"], :database => dbconfig["database"]["dbname"])
 
+# set up the redis connection
+redis = Redis.new
+
 # this will hold our feed endpoint URLs
 feed_urls = []
+
+# this will hold our users' feed lists to use later
+users_feeds = Hash.new()
+
+# get users' feeds
+getfeeds = dbclient.query("SELECT * FROM users_feeds ORDER BY user_id ASC, feed_id ASC")
+getfeeds.each do |row|
+	users_feeds[row["user_id"]] = [] unless users_feeds.has_key?(row["user_id"])
+	users_feeds[row["user_id"]].push(row["feed_id"])
+end
 
 # okay -- fetch every feed URL from the database
 dbresults = dbclient.query("SELECT feed_id, feed_url FROM feeds ORDER BY tsu ASC")
@@ -51,6 +65,9 @@ feed_urls.each { |feed_info|
 	
 	puts ""
 	puts "dealing with " + feed_info["feed_url"]
+	
+	feed_id = feed_info["feed_id"].to_i
+	feed_new_posts_count = 0
 	
 	# get the raw feed
 	feedraw = Feedzirra::Feed.fetch_raw("" + feed_info["feed_url"] + "")
@@ -68,6 +85,7 @@ feed_urls.each { |feed_info|
 	rescue Feedzirra::NoParserAvailable => err
 		# aw crap
 		puts "error parsing feed!"
+		next;
 	else
 		# successfully parsed... deal with it!
 		puts ""
@@ -105,7 +123,7 @@ feed_urls.each { |feed_info|
 			#dbchk_query = "SELECT post_id FROM posts WHERE chksum='"+entry_content_hash+"' AND feed_id=" + feed_info["feed_id"].to_s)
 			
 			# try this dbchk query instead:
-			dbchk_query = "SELECT post_id FROM posts WHERE feed_id="+feed_info["feed_id"].to_s+" AND post_guid='"+(Digest::SHA1.hexdigest entry.url)+"' AND "
+			dbchk_query = "SELECT post_id FROM posts WHERE feed_id="+feed_id.to_s+" AND post_guid='"+(Digest::SHA1.hexdigest entry.url)+"' AND "
 			if entry.title.nil?
 				dbchk_query = dbchk_query + "post_title IS NULL"
 			else
@@ -143,11 +161,12 @@ feed_urls.each { |feed_info|
 				entry_ts_db = Time.now.to_i.to_s
 				entry_chksum_db = "'" + entry_content_hash + "'"
 				
-				dbsaveentry = dbclient.query("INSERT INTO posts (feed_id, post_title, post_guid, post_permalink, post_content, post_byline, post_pubdate, ts, chksum) VALUES (#{feed_info["feed_id"]}, #{entry_title_db}, #{entry_guid_db}, #{entry_link_db}, #{entry_content_db}, #{entry_byline_db}, #{entry_pubdate_db}, #{entry_ts_db}, #{entry_chksum_db})")
+				dbsaveentry = dbclient.query("INSERT INTO posts (feed_id, post_title, post_guid, post_permalink, post_content, post_byline, post_pubdate, ts, chksum) VALUES (#{feed_id}, #{entry_title_db}, #{entry_guid_db}, #{entry_link_db}, #{entry_content_db}, #{entry_byline_db}, #{entry_pubdate_db}, #{entry_ts_db}, #{entry_chksum_db})")
 				
 				puts "entry added to database"
 				
 				entries_new += 1
+				feed_new_posts_count += 1
 				
 			else
 				puts "entry already in the database, moving on"
@@ -170,8 +189,20 @@ feed_urls.each { |feed_info|
 			feed_homeurl_db = 'null'
 		end
 		
-		updatefeedrow = dbclient.query("UPDATE feeds SET tsu=UNIX_TIMESTAMP(), feed_title=#{feed_title_db}, feed_homeurl=#{feed_homeurl_db} WHERE feed_id=" + feed_info["feed_id"].to_s)
+		# update the feed row
+		updatefeedrow = dbclient.query("UPDATE feeds SET tsu=UNIX_TIMESTAMP(), feed_title=#{feed_title_db}, feed_homeurl=#{feed_homeurl_db} WHERE feed_id=#{feed_id}")
 		
+		# if there were any new posts, update users' unread counts
+		if feed_new_posts_count > 0
+			users_feeds.each do |user_id, users_feed_ids|
+				if users_feed_ids.include?(feed_id)
+					redis.incrby("counts:#{user_id}:all:unread", feed_new_posts_count)
+					redis.incrby("counts:#{user_id}:#{feed_id}:unread", feed_new_posts_count)
+				end
+			end
+		end
+		
+		# all done with this feed, moving on
 		feeds_processed += 1
 	end
 	
