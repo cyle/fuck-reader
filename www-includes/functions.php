@@ -170,7 +170,6 @@ function getStarredPosts($user_id = 0, $howmany = 25, $offset = 0, $use_redis = 
 		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.'
 			FROM posts 
 			WHERE posts.post_id IN ('.$already_star_posts.') 
-			GROUP BY post_id 
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		if ($get_posts->num_rows == 0) {
@@ -188,7 +187,6 @@ function getStarredPosts($user_id = 0, $howmany = 25, $offset = 0, $use_redis = 
 		$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.', users_read_posts.row_id AS is_read FROM posts 
 			LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' 
 			WHERE posts.post_id IN (SELECT post_id FROM users_star_posts WHERE user_id='.$user_id.') 
-			GROUP BY post_id 
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		
@@ -238,14 +236,12 @@ function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true, $howmany 
 			$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.'
 			FROM posts 
 			WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN ('.implode(',', $users_read_posts).') 
-			GROUP BY post_id
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		} else {
 			$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.'
 			FROM posts 
 			WHERE posts.feed_id='.$feed_id.' 
-			GROUP BY post_id 
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		}
@@ -271,7 +267,6 @@ function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true, $howmany 
 			FROM posts 
 			LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
 			WHERE posts.feed_id='.$feed_id.' AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') 
-			GROUP BY post_id
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		} else {
@@ -280,7 +275,6 @@ function getFeedPosts($user_id = 0, $feed_id = 0, $just_unread = true, $howmany 
 			LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' 
 			LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
 			WHERE posts.feed_id='.$feed_id.' 
-			GROUP BY post_id 
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		}
@@ -325,14 +319,12 @@ function getAllPosts($user_id = 0, $just_unread = true, $howmany = 25, $offset =
 			$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.'
 			FROM posts 
 			WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN ('.implode(',', $users_read_posts).') 
-			GROUP BY post_id 
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		} else {
 			$get_posts = $mysqli->query('SELECT '.$necessary_posts_columns.'
 			FROM posts
 			WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.')
-			GROUP BY post_id
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		}
@@ -360,7 +352,6 @@ function getAllPosts($user_id = 0, $just_unread = true, $howmany = 25, $offset =
 			FROM posts 
 			LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
 			WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') 
-			GROUP BY post_id 
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		} else {
@@ -369,7 +360,6 @@ function getAllPosts($user_id = 0, $just_unread = true, $howmany = 25, $offset =
 			LEFT JOIN users_read_posts ON users_read_posts.post_id=posts.post_id AND users_read_posts.user_id='.$user_id.' 
 			LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
 			WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.')
-			GROUP BY post_id
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		}
@@ -430,7 +420,6 @@ function getAllPostsByDate($user_id = 0, $the_date = null, $just_unread = true, 
 			FROM posts 
 			WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN ('.implode(',', $users_read_posts).') 
 			AND posts.post_pubdate >= '.$the_date_start_db.' AND posts.post_pubdate < '.$the_date_end_db.' 
-			GROUP BY post_id 
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		} else {
@@ -438,7 +427,6 @@ function getAllPostsByDate($user_id = 0, $the_date = null, $just_unread = true, 
 			FROM posts
 			WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') 
 			AND posts.post_pubdate >= '.$the_date_start_db.' AND posts.post_pubdate < '.$the_date_end_db.' 
-			GROUP BY post_id
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		}
@@ -465,7 +453,6 @@ function getAllPostsByDate($user_id = 0, $the_date = null, $just_unread = true, 
 			LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
 			WHERE feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') AND posts.post_id NOT IN (SELECT post_id FROM users_read_posts WHERE user_id='.$user_id.') 
 			AND posts.post_pubdate >= '.$the_date_start_db.' AND posts.post_pubdate < '.$the_date_end_db.' 
-			GROUP BY post_id 
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		} else {
@@ -475,7 +462,6 @@ function getAllPostsByDate($user_id = 0, $the_date = null, $just_unread = true, 
 			LEFT JOIN users_star_posts ON users_star_posts.post_id=posts.post_id AND users_star_posts.user_id='.$user_id.' 
 			WHERE posts.feed_id IN (SELECT feed_id FROM users_feeds WHERE user_id='.$user_id.') 
 			AND posts.post_pubdate >= '.$the_date_start_db.' AND posts.post_pubdate < '.$the_date_end_db.' 
-			GROUP BY post_id
 			ORDER BY posts.post_pubdate DESC 
 			LIMIT '.$howmany.' OFFSET '.$offset);
 		}
