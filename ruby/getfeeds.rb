@@ -127,7 +127,7 @@ feed_urls.each { |feed_info|
 			if entry.title.nil?
 				dbchk_query = dbchk_query + "post_title IS NULL"
 			else
-				dbchk_query = dbchk_query + "post_title='" + dbclient.escape(entry.title) + "'"
+				dbchk_query = dbchk_query + "post_title='" + dbclient.escape(entry.title).slice(0..249) + "'"
 			end
 			
 			dbchkresults = dbclient.query(dbchk_query)
