@@ -38,25 +38,27 @@ $get_old_posts = $mysqli->query('SELECT post_id FROM posts WHERE ts < '.strtotim
 if ($get_old_posts->num_rows > 0) {
 	echo 'Found '.$get_old_posts->num_rows.' posts over '.$post_time_limit.' days old that have not been starred by anyone.'."\n";
 	
-	$old_post_ids = array();
-	while ($old_post_row = $get_old_posts->fetch_assoc()) {
-		$old_post_ids[] = $old_post_row['post_id'] * 1;
-	}
+	//$old_post_ids = array();
 	
 	// now delete them and their read/unread data
 	echo 'Deleting old posts...'."\n";
 	
-	$delete_read_data = $mysqli->query('DELETE FROM users_read_posts WHERE post_id IN ('.implode(', ', $old_post_ids).')');
-	if (!$delete_read_data) { echo 'database error deleting old users_read_posts data: '.$mysqli->error."\n"; }
+	while ($old_post_row = $get_old_posts->fetch_assoc()) {
+		//$old_post_ids[] = $old_post_row['post_id'] * 1;
+		$delete_read_data = $mysqli->query('DELETE FROM users_read_posts WHERE post_id = ' . $old_post_row['post_id']);
+		if (!$delete_read_data) { echo 'database error deleting old users_read_posts data: '.$mysqli->error."\n"; }
+		$delete_posts = $mysqli->query('DELETE FROM posts WHERE post_id = ' . $old_post_row['post_id']);
+		if (!$delete_posts) { echo 'database error deleting old posts data: '.$mysqli->error."\n"; }
+		echo '.';
+	}
 	
-	$delete_posts = $mysqli->query('DELETE FROM posts WHERE post_id IN ('.implode(', ', $old_post_ids).')');
-	if (!$delete_posts) { echo 'database error deleting old posts data: '.$mysqli->error."\n"; }
+	echo "done \n";
 	
 } else {
 	echo 'Found no posts that are over '.$post_time_limit.' days old and have not been starred by anyone.'."\n";
 }
 
-unset($old_post_ids);
+//unset($old_post_ids);
 
 
 /*

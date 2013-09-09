@@ -58,7 +58,7 @@ echo $total_stars_result['star_count'];
 </td></tr>
 <tr><td>Number of posts over 30 days old:</td><td>
 <?php
-$get_old_posts = $mysqli->query('SELECT count(post_id) AS post_count FROM posts WHERE ts > '.strtotime('-30 days'));
+$get_old_posts = $mysqli->query('SELECT count(post_id) AS post_count FROM posts WHERE ts < '.strtotime('-30 days'));
 $old_posts_result = $get_old_posts->fetch_assoc();
 echo $old_posts_result['post_count'];
 ?>
