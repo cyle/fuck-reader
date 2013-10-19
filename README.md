@@ -8,8 +8,6 @@ Front-end is PHP, feed fetching is Ruby. Feeds, posts, and user post state all s
 
 This was built with lighttpd and php5-cgi (running via fastcgi). Set document root to the "www" folder.
 
-Edit **config/login_config.example.php** and rename it to login_config.php when you're done.
-
 Edit **www-includes/dbconn_mysql.example.php** and rename it to dbconn_mysql.php when you're done.
 
 If you want to use Google Analytics, edit **config/google_analytics.example.php** and rename it to google_analytics.php when you're done.
