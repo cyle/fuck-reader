@@ -1,6 +1,6 @@
 # FUCK READER
 
-A very simple RSS reader. I built it just before Google Reader died, and I've been using this every day on my own server. A couple of my friends use it, too.
+A very simple RSS reader. I built it just before Google Reader died, and I've been using this every day on my own server. A couple of my friends use it, too. You can read more about it [here](http://cylesoft.com/blog/building-fuck-reader.html).
 
 Front-end is PHP, feed fetching is Ruby. Feeds, posts, and user post state all stored in MySQL.
 
