@@ -55,3 +55,5 @@ The `getfeeds.rb` script is not as efficient as I'd like, and with very dense RS
 There's some Redis functionality that is half-in here, but it doesn't actually do anything, so don't worry about the Redis stuff. It was a failed experiment.
 
 There's a lot of MySQL indexing stuff going on which makes this all a lot faster, but in general if you have 50+ feeds, the site will be kinda slow. Be patient with it.
+
+Change the `index.html` page as you see fit.
