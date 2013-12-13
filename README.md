@@ -6,7 +6,13 @@ Front-end is PHP, feed fetching is Ruby. Feeds, posts, and user post state all s
 
 ## Front-end installation
 
-This was built with lighttpd and php5-cgi (running via fastcgi). Set document root to the `www` folder.
+This was built with lighttpd and php5-cgi (running via fastcgi). Set the lighttpd document root to the `www` folder.
+
+Also, include this line in your lighttpd config:
+
+    include "/path/to/fuck-reader/config/fuckreader-lighty.conf"
+
+Obviously replacing the path to the file with the actual path on your server. That lighty conf file includes the routing for fuck reader. Make sure you edit the first line of it accordingly, since you won't be using **fuckreader.com**.
 
 Edit `www-includes/dbconn_mysql.example.php` with the necessary settings and rename it to `dbconn_mysql.php` when you're done.
 
