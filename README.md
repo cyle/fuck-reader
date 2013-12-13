@@ -48,6 +48,12 @@ You're free to set it to whatever frequency you want. (See note below about the 
 
 The biggest and most important note I can give is that **this is an unfinished project** and it has quirks. For instance, the cleanup script deletes stuff older than 30 days, but then if there are things older than 30 days in the RSS feeds you're scraping, they'll pop back up. That's annoying. Haven't figured that out yet, it probably means I'll need to cache things forever in some fashion. So for now, *I've turned the cleanup script off on my own server*.
 
+Making new accounts on the site is **invite code based**, and when you want to make your own account, just add a new key to the `user_invites` table. It doesn't matter what the actual invite code is, because you'll use it to make your first user. So you could just run this command via MySQL:
+
+    INSERT INTO user_invites (invite_code, owner_id, tsc) VALUES ("butts", 0, UNIX_TIMESTAMP());
+
+And then you can register a new account using the invite code "butts". If you'd like to give every user a bunch of invite codes, just use the script `www-includes/give_everyone_keys.php` via PHP CLI or by moving it to the `www` folder and going there in a browser. But don't keep it in `www` for long, as users might know to exploit it.
+
 There are a lot of planned features. I have no idea what'll be breaking what in the future. However, since I do use this every day, I probably won't make any features that seriously breaks what's already here.
 
 The `getfeeds.rb` script is not as efficient as I'd like, and with very dense RSS feeds (ones that update very often), it can choke a lot of memory. I plan on rewriting it in a better language, like Go.
