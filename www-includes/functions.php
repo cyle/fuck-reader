@@ -96,7 +96,7 @@ function getDateAllUnreadCount($user_id = 0, $the_date = null, $use_redis = fals
 	
 }
 
-function getOldestUnreadPost($user_id = 0, $use_redis = true) {
+function getOldestUnreadPost($user_id = 0, $use_redis = false) {
 	
 	if (!isset($user_id) || $user_id == 0 || !is_numeric($user_id)) {
 		return false;
