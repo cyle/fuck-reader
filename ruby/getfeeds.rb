@@ -113,14 +113,16 @@ feed_urls.each { |feed_info|
 				entry_content_hash = Digest::SHA1.hexdigest entry.content
 			end
 			
+			entry_guid_db = "'" + (Digest::SHA1.hexdigest entry.url) + "'"
+			
 			puts "Entry title: " + entry.title unless entry.title.nil?
-			puts "Entry hash: " + entry_content_hash
+			puts "Entry content hash: " + entry_content_hash
 			
 			# check to see if this entry's hash has already been recorded
 			#dbchk_query = "SELECT post_id FROM posts WHERE chksum='"+entry_content_hash+"' AND feed_id=" + feed_info["feed_id"].to_s)
 			
 			# try this dbchk query instead:
-			dbchk_query = "SELECT post_id FROM posts WHERE feed_id="+feed_id.to_s+" AND post_guid='"+(Digest::SHA1.hexdigest entry.url)+"' AND "
+			dbchk_query = "SELECT post_id FROM posts WHERE feed_id="+feed_id.to_s+" AND post_guid='"+entry_guid_db+"' AND "
 			if entry.title.nil?
 				dbchk_query = dbchk_query + "post_title IS NULL"
 			else
@@ -137,9 +139,6 @@ feed_urls.each { |feed_info|
 					entry_title_db = "'" + dbclient.escape(entry.title) + "'"
 				end
 				
-				entry_guid_db = "'" + (Digest::SHA1.hexdigest entry.url) + "'"
-				entry_link_db = "'" + dbclient.escape(entry.url) + "'"
-				
 				if entry.content.nil? and entry.summary.nil?
 					entry_content_db = "'" + dbclient.escape("'No content.'") + "'"
 				elsif entry.content.nil? and !entry.summary.nil?
@@ -154,6 +153,7 @@ feed_urls.each { |feed_info|
 					entry_byline_db = "'" + dbclient.escape(entry.author) + "'"
 				end
 				
+				entry_link_db = "'" + dbclient.escape(entry.url) + "'"
 				entry_pubdate_db = dbclient.escape(entry.published.to_i.to_s)
 				entry_ts_db = Time.now.to_i.to_s
 				entry_chksum_db = "'" + entry_content_hash + "'"
