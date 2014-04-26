@@ -158,7 +158,11 @@ feed_urls.each { |feed_info|
 				entry_ts_db = Time.now.to_i.to_s
 				entry_chksum_db = "'" + entry_content_hash + "'"
 				
-				dbsaveentry = dbclient.query("INSERT INTO posts (feed_id, post_title, post_guid, post_permalink, post_content, post_byline, post_pubdate, ts, chksum) VALUES (#{feed_id}, #{entry_title_db}, #{entry_guid_db}, #{entry_link_db}, #{entry_content_db}, #{entry_byline_db}, #{entry_pubdate_db}, #{entry_ts_db}, #{entry_chksum_db})")
+				dbsaveentry = dbclient.query("INSERT INTO posts (feed_id, post_title, post_guid, post_permalink, post_byline, post_pubdate, ts, chksum) VALUES (#{feed_id}, #{entry_title_db}, #{entry_guid_db}, #{entry_link_db}, #{entry_byline_db}, #{entry_pubdate_db}, #{entry_ts_db}, #{entry_chksum_db})")
+				
+				new_post_id = dbclient.last_id
+				
+				dbsavecontent = dbclient.query("INSERT INTO posts_content (post_id, post_content) VALUES (#{new_post_id}, #{entry_content_db})")
 				
 				puts "entry added to database"
 				

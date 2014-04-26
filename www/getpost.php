@@ -25,10 +25,17 @@ $post_json['url'] = $post['post_permalink'];
 $post_json['author'] = $post['post_byline'];
 $post_json['published'] = $post['post_pubdate'];
 
+$get_post_content = $mysqli->query('SELECT * FROM posts_content WHERE post_id='.$post_id);
+if (!$get_post_content || $get_post_content->num_rows == 0) {
+	die(json_encode(array('error' => 'no post content found with that ID, sorry')));
+}
+
+$post_content = $get_post_content->fetch_assoc();
+
 $post_final_body = '';
 $post_body = new DOMDocument('1.0', 'UTF-8');
 error_reporting(0);
-$post_body->loadHTML('<?xml encoding="UTF-8">' . $post['post_content']);
+$post_body->loadHTML('<?xml encoding="UTF-8">' . $post_content['post_content']);
 foreach ($post_body->childNodes as $item) {
 	if ($item->nodeType == XML_PI_NODE) {
 		$post_body->removeChild($item); // remove hack

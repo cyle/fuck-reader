@@ -1,11 +1,14 @@
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+--
+-- Database: `fuckreader`
+--
+CREATE DATABASE IF NOT EXISTS `fuckreader` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `fuckreader`;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `feeds`
+--
 
 CREATE TABLE `feeds` (
   `feed_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -17,6 +20,12 @@ CREATE TABLE `feeds` (
   PRIMARY KEY (`feed_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `flood_control`
+--
+
 CREATE TABLE `flood_control` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ipaddr` varchar(64) NOT NULL,
@@ -26,6 +35,12 @@ CREATE TABLE `flood_control` (
   PRIMARY KEY (`id`),
   KEY `ipaddr` (`ipaddr`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts`
+--
 
 CREATE TABLE `posts` (
   `post_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -49,6 +64,26 @@ CREATE TABLE `posts` (
   KEY `pubdate_index` (`post_pubdate`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts_content`
+--
+
+CREATE TABLE `posts_content` (
+  `content_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) unsigned NOT NULL,
+  `post_content` text NOT NULL,
+  PRIMARY KEY (`content_id`),
+  KEY `post_id` (`post_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
 CREATE TABLE `users` (
   `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uname` varchar(250) DEFAULT NULL,
@@ -60,6 +95,12 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_feeds`
+--
+
 CREATE TABLE `users_feeds` (
   `row_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -70,6 +111,12 @@ CREATE TABLE `users_feeds` (
   KEY `feed_id_index` (`feed_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_read_posts`
+--
+
 CREATE TABLE `users_read_posts` (
   `row_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -78,9 +125,14 @@ CREATE TABLE `users_read_posts` (
   PRIMARY KEY (`row_id`),
   UNIQUE KEY `user_read_key` (`user_id`,`post_id`),
   KEY `user_id_index` (`user_id`),
-  KEY `post_id_index` (`post_id`),
-  KEY `retrieval_index` (`user_id`,`post_id`)
+  KEY `post_id_index` (`post_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_star_posts`
+--
 
 CREATE TABLE `users_star_posts` (
   `row_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -90,9 +142,14 @@ CREATE TABLE `users_star_posts` (
   PRIMARY KEY (`row_id`),
   UNIQUE KEY `user_star_key` (`user_id`,`post_id`),
   KEY `user_id_index` (`user_id`),
-  KEY `post_id_index` (`post_id`),
-  KEY `retrieval_index` (`user_id`,`post_id`)
+  KEY `post_id_index` (`post_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_invites`
+--
 
 CREATE TABLE `user_invites` (
   `invite_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -106,6 +163,12 @@ CREATE TABLE `user_invites` (
   UNIQUE KEY `invite_code_unique` (`invite_code`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_sessions`
+--
+
 CREATE TABLE `user_sessions` (
   `session_key` varchar(255) DEFAULT NULL,
   `session_secret` varchar(255) DEFAULT NULL,
@@ -114,7 +177,3 @@ CREATE TABLE `user_sessions` (
   `ts` int(11) NOT NULL,
   KEY `session_key_index` (`session_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
