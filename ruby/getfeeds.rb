@@ -122,7 +122,7 @@ feed_urls.each { |feed_info|
 			#dbchk_query = "SELECT post_id FROM posts WHERE chksum='"+entry_content_hash+"' AND feed_id=" + feed_info["feed_id"].to_s)
 			
 			# try this dbchk query instead:
-			dbchk_query = "SELECT post_id FROM posts WHERE feed_id="+feed_id.to_s+" AND post_guid='"+entry_guid_db+"' AND "
+			dbchk_query = "SELECT post_id FROM posts WHERE feed_id="+feed_id.to_s+" AND post_guid="+entry_guid_db+" AND "
 			if entry.title.nil?
 				dbchk_query = dbchk_query + "post_title IS NULL"
 			else
