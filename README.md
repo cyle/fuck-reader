@@ -2,11 +2,11 @@
 
 A very simple RSS reader. I built it just before Google Reader died, and I've been using this every day on my own server. A couple of my friends use it, too. You can read more about it [here](http://cylesoft.com/blog/building-fuck-reader.html).
 
-Front-end is PHP, feed fetching is Ruby. Feeds, posts, and user post state all stored in MySQL.
+Front-end is PHP, feed fetching is Ruby. Feeds, posts, and user post state all stored in MySQL or MariaDB.
 
 ## Front-end installation
 
-This was built with lighttpd and php5-cgi (running via fastcgi). Set the lighttpd document root to the `www` folder.
+This was built with lighttpd and php5-cgi (running via fastcgi). It's also been tested with php5-fpm. Set the lighttpd document root to the `www` folder.
 
 Also, include this line in your lighttpd config:
 
@@ -18,24 +18,24 @@ Edit `www-includes/dbconn_mysql.example.php` with the necessary settings and ren
 
 If you want to use Google Analytics, edit `config/google_analytics.example.php` and rename it to `google_analytics.php` when you're done. If you **do not** want to use Google Analytics, then comment out the last line in `footer.php` which mentions it.
 
-I used MySQL, and included in `config/fuckreader.sql` are the table schemas used by FUCK READER. Just make a database called "fuckreader" and import that using phpMyAdmin or something.
+I used MySQL, and then later MariaDB, and included in `config/fuckreader.sql` are the table schemas used by FUCK READER. Just make a database called "fuckreader" and import that using phpMyAdmin or something.
 
 ## Feed Fetching Prereqs
 
-Feed fetching uses the ["feedzirra" library](https://github.com/pauldix/feedzirra) from the folks at feedbin.
+Feed fetching uses the ["feedjira" library](https://github.com/feedjira/feedjira) from the folks at feedbin.
 
 On Debian-based servers (Debian, Ubuntu), you need these prereqs:
 
     apt-get install ruby1.9.1 ruby1.9.1-dev build-essential libcurl4-openssl-dev libxml2-dev libxslt-dev
 
-Install rubygems to a specific version. At the time of this writing, rubygems 2.0+ won't install feedzirra.
+Install rubygems to a specific version. At the time of this writing, rubygems 2.0+ won't install feedjira. If `gem` is already 1.8.x, ignore this.
 
     git clone https://github.com/rubygems/rubygems.git
     cd rubygems
     git checkout v1.8.25
     ruby setup.rb
 
-Install feedzirra:
+Install feedjira and other Ruby prereqs:
 
     gem install feedjira mysql2 nokogiri
 

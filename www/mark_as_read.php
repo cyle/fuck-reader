@@ -6,7 +6,6 @@ $login_required = true;
 require_once('../www-includes/login_check.php');
 
 require_once('../www-includes/dbconn_mysql.php');
-require_once('../www-includes/dbconn_redis.php');
 
 if (isset($_GET['ts']) && is_numeric($_GET['ts'])) {
 	$before_ts = (int) $_GET['ts'] * 1;
@@ -22,11 +21,6 @@ if (isset($_GET['all']) && trim($_GET['all']) == 'yup') {
 	while ($unread_post = $get_all_unread_post_ids->fetch_assoc()) {
 		// insert into mysql
 		$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, ".$unread_post['post_id'].", UNIX_TIMESTAMP())");
-		// insert into redis
-		$mark_redis = $redis->sadd('postsread:'.$current_user_id, $unread_post['post_id']);
-		
-		// need to figure out how to decrement the users' individual feeds counts in redis
-		
 	}
 	//echo 'ok';
 	header('Location: /feeds/'); // send user back to /feeds/ for now
@@ -40,13 +34,8 @@ if (isset($_GET['all']) && trim($_GET['all']) == 'yup') {
 	while ($unread_post = $get_feeds_unread_post_ids->fetch_assoc()) {
 		// insert into mysql
 		$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, ".$unread_post['post_id'].", UNIX_TIMESTAMP())");
-		// insert into redis
-		$mark_redis = $redis->sadd('postsread:'.$current_user_id, $unread_post['post_id']);
 		$num_posts_marked_read++;
 	}
-	// decrement the unread count of this user's associated unread-for-this-feed cache in redis
-	$decr_redis = $redis->decrby('counts:'.$current_user_id.':'.$feed_id.':unread', $num_posts_marked_read);
-	//echo 'ok';
 	header('Location: /feed/'.$feed_id.'/'); // send user back to /feeds/ for now
 } else if (isset($_GET['d']) && trim($_GET['d']) != '') {
 	// declare all posts for a certain day as read!
@@ -64,11 +53,6 @@ if (isset($_GET['all']) && trim($_GET['all']) == 'yup') {
 	while ($unread_post = $get_dates_post_ids->fetch_assoc()) {
 		// insert into mysql
 		$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, ".$unread_post['post_id'].", UNIX_TIMESTAMP())");
-		// insert into redis
-		$mark_redis = $redis->sadd('postsread:'.$current_user_id, $unread_post['post_id']);
-		
-		// need to figure out how to decrement the users' individual feeds counts in redis
-		
 	}
 	//echo 'ok';
 	header('Location: /feeds/'.date('Y-m-d', $the_date).'/'); // send user back to /feeds/ for now
@@ -77,11 +61,6 @@ if (isset($_GET['all']) && trim($_GET['all']) == 'yup') {
 	$post_id = (int) $_GET['pid'] * 1;
 	// insert into mysql
 	$mark = $mysqli->query("INSERT INTO users_read_posts (user_id, post_id, tsc) VALUES ($current_user_id, $post_id, UNIX_TIMESTAMP())");
-	// insert into redis
-	$mark_redis = $redis->sadd('postsread:'.$current_user_id, $post_id);
-	
-	// need to figure out how to decrement the users' individual feeds counts in redis
-	
 	echo 'ok';
 } else {
 	die('error: dunno what do');
