@@ -66,7 +66,7 @@ feed_urls.each { |feed_info|
 	feed_new_posts_count = 0
 	
 	# get the raw feed
-	feedraw = Feedjira::Feed.fetch_raw("" + feed_info["feed_url"] + "")
+	feedraw = Feedjira::Feed.fetch_raw("" + feed_info["feed_url"] + "", { :timeout => 5 })
 
 	unless feedraw.is_a?(String)
 		# maybe it gave us a 404 or something like that, whatever. move on.
