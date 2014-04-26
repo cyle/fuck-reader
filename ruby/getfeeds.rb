@@ -3,19 +3,18 @@
 #
 
 # notes:
-# feedzirra github reference: https://github.com/pauldix/feedzirra
-# feedzirra ruby doc: http://rubydoc.info/gems/feedzirra/0.1.3/frames
+# feedjira github reference: https://github.com/feedjira/feedjira
+# feedjira website: http://feedjira.com/
 # mysql2 github ref: https://github.com/brianmario/mysql2
 #
-# this script DOES NOT use feedzirra's fetch_and_parse() method because it breaks if there's any problem fetching a feed
+# this script DOES NOT use feedjira's fetch_and_parse() method because it breaks if there's any problem fetching a feed
 #
 
 
 # ok, load everything we need
 
 require 'nokogiri'
-require 'feedzirra'
-require 'redis'
+require 'feedjira'
 require 'mysql2'
 require 'yaml'
 require 'digest/sha1'
@@ -37,9 +36,6 @@ puts ""
 
 # set up the database connection
 dbclient = Mysql2::Client.new(:host => dbconfig["database"]["dbhost"], :username => dbconfig["database"]["dbuser"], :password => dbconfig["database"]["dbpass"], :database => dbconfig["database"]["dbname"])
-
-# set up the redis connection
-redis = Redis.new
 
 # this will hold our feed endpoint URLs
 feed_urls = []
@@ -70,8 +66,8 @@ feed_urls.each { |feed_info|
 	feed_new_posts_count = 0
 	
 	# get the raw feed
-	feedraw = Feedzirra::Feed.fetch_raw("" + feed_info["feed_url"] + "")
-	
+	feedraw = Feedjira::Feed.fetch_raw("" + feed_info["feed_url"] + "")
+
 	unless feedraw.is_a?(String)
 		# maybe it gave us a 404 or something like that, whatever. move on.
 		# should probably take note of this somewhere in the database
@@ -81,8 +77,9 @@ feed_urls.each { |feed_info|
 	
 	begin
 		# try parsing the feed!
-		parsed = Feedzirra::Feed.parse(feedraw)
-	rescue Feedzirra::NoParserAvailable => err
+		parsed = Feedjira::Feed.parse(feedraw)
+
+	rescue Feedjira::NoParserAvailable => err
 		# aw crap
 		puts "error parsing feed!"
 		next;
@@ -192,16 +189,6 @@ feed_urls.each { |feed_info|
 		# update the feed row
 		updatefeedrow = dbclient.query("UPDATE feeds SET tsu=UNIX_TIMESTAMP(), feed_title=#{feed_title_db}, feed_homeurl=#{feed_homeurl_db} WHERE feed_id=#{feed_id}")
 		
-		# if there were any new posts, update users' unread counts
-		if feed_new_posts_count > 0
-			users_feeds.each do |user_id, users_feed_ids|
-				if users_feed_ids.include?(feed_id)
-					redis.incrby("counts:#{user_id}:all:unread", feed_new_posts_count)
-					redis.incrby("counts:#{user_id}:#{feed_id}:unread", feed_new_posts_count)
-				end
-			end
-		end
-		
 		# all done with this feed, moving on
 		feeds_processed += 1
 	end
@@ -222,3 +209,6 @@ puts "That took... " + seconds_exec.to_s + " seconds"
 puts "Processed " + feeds_processed.to_s + " feeds"
 puts "Processed " + entries_processed.to_s + " entries"
 puts "Processed " + entries_new.to_s + " new entries"
+
+dbclient.close
+exit

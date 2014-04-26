@@ -37,7 +37,7 @@ Install rubygems to a specific version. At the time of this writing, rubygems 2.
 
 Install feedzirra:
 
-    gem install feedzirra
+    gem install feedjira mysql2 nokogiri
 
 Now you can use the `getfeeds.rb` file. Fun!
 
