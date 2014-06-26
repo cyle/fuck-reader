@@ -113,6 +113,11 @@ feed_urls.each { |feed_info|
 				entry_content_hash = Digest::SHA1.hexdigest entry.content
 			end
 			
+			if entry.url.nil?
+				puts "Entry has no URL, moving on..."
+				next
+			end
+			
 			entry_guid_db = "'" + (Digest::SHA1.hexdigest entry.url) + "'"
 			
 			puts "Entry title: " + entry.title unless entry.title.nil?
