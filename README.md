@@ -37,17 +37,17 @@ Install rubygems to a specific version. At the time of this writing, rubygems 2.
 
 Install feedjira and other Ruby prereqs:
 
-    gem install feedjira mysql2 nokogiri
+    gem install feedjira mysql2 nokogiri unidecoder
 
 Now you can use the `getfeeds.rb` file. Fun!
 
 ## Crontab
-    
+
 Put this in your crontab file:
 
     */5 * * * * cd /path/to/fuckreader/ruby; /usr/bin/ruby getfeeds.rb > ../logs/feeds.log
     0 3 * * * cd /path/to/fuckreader/www-includes; /usr/bin/php cleanup.php > ../logs/cleanup.log
-    
+
 You're free to set it to whatever frequency you want. (See note below about the cleanup script, btw.)
 
 ## Notes -- please read
